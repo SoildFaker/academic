@@ -44,9 +44,11 @@
 
 		\subsubsection{模糊评价模型}
 			
-			\begin{figure}
+			\begin{figure}[!htbp]
 				\centering
-				\includegraphics[width=0.5\textwidth]{pic/braess.eps}
+				\includegraphics[width=0.7\textwidth]{pic/judge_result.pdf}
+				\caption{影响因素的分层次结构}
+				\label{fig:layer_struct}
 			\end{figure}
 			设影响因素的主因素集$ U=\{u_1,u_2,u_3\} $，评判等级集$ V=\{v_1,v_2,v_3\} $。
 			其中$ U $中$ u_1 $代表路网结构改变对周边道路的影响，$ u_2 $代表人流量与非机动车流量对周边道路的影响，$ u_3 $代表可能增加的路口对周边道路造成的影响；$ V $中$ v_1 $代表开放小区对周边道路交通有积极影响，$ v_2 $代表开放小区对周边道路交通的改善效果一般，$ v_3 $代表开放小区对周边道路交通有不利影响。
@@ -77,9 +79,60 @@
 				\overline{B}=A \cdot R=(\overline{b_1},\overline{b_2},\overline{b_3}) 
 				\label{eq:judge_result}
 			\end{equation}
-			\ref{eq:judge_result}即是开放小区对周边交通影响的评价结果，其中$\overline{b_1},\overline{b_2},\overline{b_3}$分别代表主要因素对于评判等级的隶属度，归一化后我们还可以得到开放小区对对周边的影响曲艺某一个等级的程度即$ B=(b_1,b_2,b_3) $。
+			\ref{eq:judge_result}即是开放小区对周边交通影响的评价结果，其中$\overline{b_1},\overline{b_2},\overline{b_3}$分
+			别代表主要因素对于评判等级的隶属度，归一化后我们还可以得到开放小区对周边的影响趋向某一个等级的程度即$ B=(b_1,b_2,b_3) $。
+
+	\subsection{问题二}
+		车辆通行时受到多方面因素的影响，我们通过建立模型得出车辆从起点到终点所用的时间，以此来分析开放小区对周边交通的影响。其中所用时间可以分为行驶在路上花费的行程时间，与因为其他因素造成的延误时间。
+
+		\subsubsection{延误时间}
+			延误时间\upcite{任福田2003交通工程学}是指，道路上通行所需时间除行走时间外，也受市政道路交通信号灯的影响，如\eqref{eq:delay_func}所示。
+			\begin{equation}
+			t_d=\frac{0.5T(1-\frac{t_g}{T})}{1-[min(1,x)\cdot{\frac{t_g}{T}}]}
+			\label{eq:delay_func}
+			\end{equation}
+			其中$ T $表示信号灯周期长度，$ t_g $代表绿灯时间，$ x $代表最大交通量与基本交通量之比。
+			
+		\subsubsection{行程时间}
+			车辆行驶的行程时间主要受到道路阻抗的影响道路阻抗是表达车辆在运行过程中受到的阻碍程度的高低的量值，是城市交通网络研究中的重要参量，它直接影响交通流的路径选择和流量分配。
+			
+			美国联邦公路局路阻函数(即BPR函数)如\eqref{bpr_plain}所示。
+			\begin{equation}
+				t(q)=t_0[1+\alpha(q/c)^\beta]
+				\label{bpr_plain}
+			\end{equation}
+			其中$ t(q) $表示流量为q时该路段的行程时间，$ t_0 $为该路段的自由流行程时间，$ c $为该路段上的实际通行能力，$ \alpha,\beta $为回归系数，一般取$ \alpha=0.15,\beta=4 $由于模型中的c并不具有固定的含义\upcite{郑远2007美国联邦公路局路阻函数探讨}，我们采取修正过的BPR函数并对其改进
+			，考虑到小区内道路上行人、自行车等非机动车较多的
+			特点，增加行人对机动车的影响、自行车对机动车的影响。结合已有的研究成果\upcite{李向朋2014城市交通拥堵对策—封闭型小区交通开放研究}，得到行人干扰修正系数如表\ref{tab:walker_noise}。自行车分别对车辆的影响系数，得到改进BPR函数。
+			\begin{table}[!htbp]
+				\centering
+				\caption{行人干扰的修正系数}
+				\label{tab:walker_noise}
+				\begin{tabular}{c|cccccc}
+					\hline 
+					干扰程度 & 很严重 & 严重 & 较严重 & 一般 & 很小 & 无 \\ 
+					\hline 
+					$\eta$ & 0.5 & 0.6 & 0.7 & 0.8 & 0.9 & 1.0 \\ 
+					\hline 
+				\end{tabular}
+			\end{table}
 		\subsubsection{道路条件}
-			开放小区会导致人流量增加
+			首先，对小区周边道路条件进行分析。道路通行主要考虑从一点到另一点的实际通行时间，实际通行时间$ T=d_1+D $，其中$ d_1 $为延误时间，$ D $为行程时间。
+
+			通行时间是指，在不考虑交通路口的通行状况下，通过某个路段所需时间。常用的通行时间函数
+			美国联邦公路局函数(即BPR函数)如\eqref{bpr_plain}所示。
+			\begin{equation}
+				t_{ij}=\alpha_{ij}+\beta_{ij}f_{ij}
+				\label{bpr_plain}
+			\end{equation}
+			其中$ ij $表示从i路段到j路段，$ t_{ij} $表示在该路段所花的时间，$ \alpha_{ij} $为路段上的
+			结合具体情况，对其改进\upcite{李向朋2014城市交通拥堵对策—封闭型小区交通开放研究}
+			，考虑到小区内道路上行人、自行车等非机动车较多的
+			特点，增加行人对机动车的影响、自行车对机动车的影响。结合已有的研究成果，得到行人
+			、自行车分别对车辆的影响系数，得到改进BPR函数。BPR阻抗函数为：
+					
+		\subsubsection{行程时间}
+		\subsubsection{车流量}
 		\subsubsection{Braess悖论}
 			数学家Dietrich Braess在1968年首次提出了Braess悖论\upcite{Braess1968Ü}。
 			考虑拓扑结构如图\ref{fig:braess}的交通网，假设交通网中的流量为4000，起点为A，终点为D
@@ -96,50 +149,23 @@
 			+45=65 $分钟。
 			
 			现在考虑$ B \rightarrow C $开通之后，其通过时间非常短，在这种情况下，所有司机都会选择$ A \rightarrow B \rightarrow C \rightarrow D $这条路线，因为即使所有车辆全部通过$ A \rightarrow B $所用时间也不超过40分钟，这样所有通过这条路径的时间为$ \frac{4000}{100}\times 2+10=90$分钟，Braess悖论便是指这种情况。
-		\subsubsection{基于Braess的评价系统}
+			\subsubsection{基于Braess的评价系统}
 			小区开放相当与在原有的交通网络中再次加入新的网路，其中必然会有某些情况导致Braess悖论的发生，而出现这种情时况不宜开放小区。
 			
 			查阅论文可知Pas和Principcipio在其论文中指出了Braess悖论不发生的两种情况\upcite{pas1997braess}，一种时交通量低时，如\ref{eq:Q_low}，另一种时交通量高时\ref{eq:Q_high}，当交通量符合上述两种情况时，不发生Braess现象，如\ref{eq:Q_mid}所示。
 			\begin{equation}
-				Q>\frac{2(\alpha_n-\alpha_x)}{3\beta_n+\beta_x}
-				\label{eq:Q_low}
+			Q>\frac{2(\alpha_n-\alpha_x)}{3\beta_n+\beta_x}
+			\label{eq:Q_low}
 			\end{equation}
 			\begin{equation}
-				Q<\frac{2(\alpha_n-\alpha_x)}{\beta_n-\beta_x}
-				\label{eq:Q_high}
+			Q<\frac{2(\alpha_n-\alpha_x)}{\beta_n-\beta_x}
+			\label{eq:Q_high}
 			\end{equation}
 			\begin{equation}
-				\frac{2(\alpha_n-\alpha_x)}{3\beta_n+\beta_x}<Q<\frac{2(\alpha_n-\alpha_x)}{\beta_n-\beta_x}
-				\label{eq:Q_mid}
+			\frac{2(\alpha_n-\alpha_x)}{3\beta_n+\beta_x}<Q<\frac{2(\alpha_n-\alpha_x)}{\beta_n-\beta_x}
+			\label{eq:Q_mid}
 			\end{equation}
-			其中$ Q $为交通需求，
-	\subsection{问题二}
-	考虑小区开放对周边道路通行的两个影响因素：道路条件、交通条件。
-		\subsubsection{道路条件}
-			首先，对小区周边道路条件进行分析。道路通行主要考虑从一点到另一点的实际通行时间，实际通行时间$ T=d_1+D $，其中$ d_1 $为延误时间，$ D $为行程时间。
-
-			延误时间\upcite{任福田2003交通工程学}是指，道路上通行所需时间除行走时间外，也受市政道路交通信号灯的影响，如\eqref{eq:delay_func}所示。
-			\begin{equation}
-				d_1=\frac{0.5T(1-\frac{t_g}{T})}{1-[min(1,x)\cdot{\frac{t_g}{T}}]}
-				\label{eq:delay_func}
-			\end{equation}
-			其中$ T $表示信号灯周期长度，$ t_g $代表绿灯时间，$ x $代表最大交通量与基本交通量之比。
-			
-			通行时间是指，在不考虑交通路口的通行状况下，通过某个路段所需时间。常用的通行时间函数
-			美国联邦公路局函数(即BPR函数)如\eqref{bpr_plain}所示。
-			\begin{equation}
-				t_{ij}=\alpha_{ij}+\beta_{ij}f_{ij}
-				\label{bpr_plain}
-			\end{equation}
-			其中$ ij $表示从i路段到j路段，$ t_{ij} $表示在该路段所花的时间，$ \alpha_{ij} $为路段上的
-			结合具体情况，对其改进\upcite{李向朋2014城市交通拥堵对策—封闭型小区交通开放研究}
-			，考虑到小区内道路上行人、自行车等非机动车较多的
-			特点，增加行人对机动车的影响、自行车对机动车的影响。结合已有的研究成果，得到行人
-			、自行车分别对车辆的影响系数，得到改进BPR函数。BPR阻抗函数为：
-					
-		\subsubsection{行程时间}
-		\subsubsection{车流量}
-			
+			其中$ Q $为交通需求，		
 	\subsection{问题二}
 		综合问题一的评价模型建立元胞自动机模型
 		\begin{equation}
