@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import getopt,sys
 from matplotlib.animation import FuncAnimation
 import random
+import Tkinter as tk
 import math
 import map_da
 
@@ -97,7 +98,6 @@ class Map(object):
  
     def stop(self):
         pass
-
 map1 = Map(50,map_da.map_data)
 map1.init()
 map1.plot()
