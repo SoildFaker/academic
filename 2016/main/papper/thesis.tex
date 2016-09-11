@@ -52,6 +52,12 @@
 	\item 小区结构及周边道路的车流量、道路结构可能会对小区开放效果产生影响。选取或构建不同类型的小区，运用上述过程中所建立的模型，就各类型小区开放前后对道路通行的影响进行比较并作定量分析。
 	\item 根据上述研究结果，从交通通行的角度，向城市规划和交通管理部门提出关于小区开放的合理化建议。
 \end{enumerate}
+  \section{模型假设}
+  \begin{enumerate}
+  	\item 道路上不存在违规停车，不设置任何人为道路障碍，且通行中不出现任何故障。
+  	\item 假设小区开放道路均为双向两车道。
+  	\item 假设道路上通行的行人、非机动车和机动车均按交通规则自由通行，不出现故意扰乱交通规则的行为，行人、非机动车对机动车的干扰系数为定值。
+  \end{enumerate}
   \section{符号说明}
   \begin{tabular}{c|c}
 	\toprule[1pt]
@@ -67,6 +73,7 @@
 	$\eta,\eta_b$	&	行人与非机动车影响系数\\
 	\bottomrule[1pt]
 \end{tabular}
+
   \section{问题分析}
   随着经济的发展，道路压力越来越大，我国现行的路网结构无法满足日益增长的车流量需求，而国外的小区开放制度对交通压力的缓解方式值得借鉴。根据对国内外开放小区与封闭小区数据的收集和对比，得到表\ref{tab:net_density}中的数据。
   \begin{table}[!htbp]
@@ -153,7 +160,7 @@
 			别代表主要因素对于评判等级的隶属度，归一化后我们还可以得到开放小区对周边的影响趋向某一个等级的程度即$ B=(b_1,b_2,b_3) $。
 
 	\subsection{问题二}
-		交通网络通行主要受到道路阻抗的影响道，路阻抗是表达车辆在运行过程中受到的阻碍程度的高低的量值，是城市交通网络研究中的重要参量，它直接影响交通流的路径选择和流量分配。
+		交通网络通行主要受到道路阻抗的影响，路阻抗是表达车辆在运行过程中受到的阻碍程度的高低的量值，是城市交通网络研究中的重要参量，它直接影响交通流的路径选择和流量分配。
 		
 		在一个交通网络$G(N,L)$中，N为网络中的节点集合，L为网络中的路段集合。现有出发地/目的地(OD)的集合W含有$n_w$个元素，链接W中路径的集合记为$P$，链接P中每个元素的路径的集合记为$P_w$，记$t_a$为路段a的行程时间，$r_a$为路段a上的阻抗，$R_p$记为路径p上的阻抗，$T_p$为路径p的行程时间，$q_a$为路段a的流量，$Q_p$为路径p上的流量，$d_w$记为P中路径的交通需求，根据以上条件建立模型\upcite{赵春雪2012拥挤交通网络的}。
 		
@@ -167,7 +174,7 @@
 			Q_a=\sum\limits_{a\in L}q_ak_ap,\quad\forall a \in L
 			\label{eq:qud_for_a}
 		\end{equation}
-		由\eqref{eq:res_for_a}和\eqref{eq:qud_for_a}可以得阻抗到在某一路径p上的表达式如\eqref{eq:res_for_p}所示，其中$\{1,2,\dots,\Lambda\}$，为包含a或与a相邻的路径集合。
+		由\eqref{eq:res_for_a}和\eqref{eq:qud_for_a}可以得到阻抗在某一路径p上的表达式如\eqref{eq:res_for_p}所示，其中$\{1,2,\dots,\Lambda\}$，为包含a或与a相邻的路径集合。
 		
 		\begin{equation}
 			R_a=\sum\limits_{p\in P}r_a(q_a,q_1,q_2,\dots,q_\Lambda)k_ap,\quad\forall p \in P
@@ -216,7 +223,7 @@
 				\eta_b = 0.8-\frac{(q_b/Q_b+0.5-W_2)}{W_1}
 				\label{eq:bike}
 			\end{equation}
-			其中$ \eta_b $非机动车干扰系数，$ q_b $非机动车流量，$ Q_b $非机动车道通行能力$ W_1,W_2 $
+			其中$ \eta_b $非机动车干扰系数，$ q_b $非机动车流量，$ Q_b $非机动车道通行能力，$ W_1,W_2 $
 			非机动车道宽度与机动车道宽度。
 			
 			综上所述，得到改进BPR路阻函数如\eqref{eq:bpr_imporve}。
@@ -272,7 +279,11 @@
 			\begin{equation}
 				\begin{array}{c}
 					\hat{R_p}(Q^*)=\nu_w,\quad Q_p^* > 0\\
-					\hat{R_p}(Q^*)\leq\nu_w,\quad Q_p^* = 0
+				
+				
+				1.
+				
+				2.		\hat{R_p}(Q^*)\leq\nu_w,\quad Q_p^* = 0
 				\end{array}
 				\label{eq:so_equation}
 			\end{equation}
@@ -280,16 +291,17 @@
 		\subsubsection{基于系统最优分配Braess悖论的判别}
 			小区开放相当于在原有的交通网络中再次加入新的网络，其中必然会存在某些情况导致Braess悖论的发生，而出现这种情况时不宜开放小区。
 			
-			查阅论文可知Pas和Principcipio在其论文中指出了Braess悖论不发生的两种情况\upcite{pas1997braess}，一种是交通需求量低时，如\eqref{eq:Q_low}，另一种时交通需求量高时\eqref{eq:Q_high}，当交通量符合上述两种情况时，不发生Braess现象，其中$\alpha_n$与$\beta_n$分别为总阻抗函数的常数项系数与一次项系数。
+			查阅论文可知Pas和Principcipio在其论文中指出了Braess悖论不发生的两种情况\upcite{pas1997braess}，一种是交通需求量低时，如\eqref{eq:Q_low}，另一种时交通需求量高时\eqref{eq:Q_high}，当交通量符合上述两种情况时，不发生Braess现象，其中$\gamma_n$与$\delta_n$分别为总阻抗函数的常数项系数与一次项系数。
 			\begin{equation}
-				Q<\frac{2(\alpha_1-\alpha_2)}{3\beta_1+\beta_2}
+				Q<\frac{2(\gamma_1-\gamma_2)}{3\delta_1+\delta_2}
 				\label{eq:Q_low}
 			\end{equation}
 			\begin{equation}
-				Q>\frac{2(\alpha_1-\alpha_2)}{\beta_1-\beta_2}
+				Q>\frac{2(\gamma_1-\gamma_2)}{\delta_1-\delta_2}
 				\label{eq:Q_high}
 			\end{equation}
 	\subsection{问题三}
+		
 		在城市交通中，交通网络通行能力的大小会受到一路段或某一路口的影响于，一般道路等级高的路段会有更多的容纳能力，根据《城市道路工程设计规范》我国城市公路分级如表\ref{tab:road_type}所示。
 		\begin{table}[!htbp]
 			\centering
@@ -300,14 +312,14 @@
 				项目级别&设计车速(km/h)&单向机动车道数（条)&分隔带设置\\
 				\hline
 				快速路	&60-100	&$\geq$4	&必须设\\
-				主干路	&60-40	&$\geq$4	&应设\\
+				主干路	&40-60	&$\geq$4	&应设\\
 				次干路	&30-50	&$\geq$2	&可设\\
 				支路	 &20-40	 &2			&不设\\
 				\bottomrule[1pt]
 			\end{tabular}
 		\end{table}
-		
-		市区街道大多属于主干路与次干路，而封闭式小区中大多为支路等级的道路，由此我们构建了三种不同类型的小区如表\ref{tab:apartment_type}所示。
+		\subsubsection{开放小区的类型}
+		市区街道大多属于主干路与次干路，而封闭式小区中大多为支路等级的道路，由此我们构建了三种不同类型的小区如表\ref{tab:apartment_type}所示，其中如果小区中采用人车分离的道路设计，那么在道路阻抗函数中行人对车辆的干扰系数将取1，除此之外，小区与主干道的出口多少也是需要考虑的因素。
 		\begin{table}[!htbp]
 			\centering
 			\caption{小区类型表}
@@ -316,7 +328,7 @@
 				\toprule[1pt] 
 				类型 & 道路等级 & 周围道路等级 & 人车分离 & 出口数量 \\ 
 				\hline 
-				A型 & 支路 & 次干道 & 不分离 &  5\\ 
+				A型 & 支路 & 次干道 & 不分离 &  3\\ 
 				B型 & 支路 & 次干道 &  分离&  3\\ 
 				C型 & 支路 & 主干路 &  分离&  4\\ 
 				\bottomrule[1pt]
@@ -328,7 +340,9 @@
 			\caption{A类型小区的路网结构}
 			\label{fig:net_a}
 		\end{figure}		
-		首先考虑A类型小区如图\ref{fig:net_a}所示，其中灰色区域为原封闭小区区域，周围道路设施情况如表\ref{tab:road_level_a}所示。
+		
+		首先考虑A类型小区如图\ref{fig:net_a}所示，其中灰色区域为原封闭小区区域，小区中有多条道路，其中只有L-G、L-J和L-M三条道路适合开放并入现有交通网，小区周围道路均为城市主要干道，车流量大，周围道路设施情况如表\ref{tab:road_level_a}所示。
+		
 
 		\begin{table}[!htbp]
 			\centering
@@ -336,18 +350,18 @@
 			\label{tab:road_level_a}
 			\begin{tabular}{c|ccc}
 				\toprule[1pt] 
-				道路&				道路等级&	车道数量&	人车分离\\
+				道路&				道路等级&	车道数量&人车分离\\
 				\hline
-				D-K&	主干道&	4&			分离\\
-				A-F&	主干道&	4&			分离\\
-				E-C&	次干道&	2&			不分离\\
-				G-I&	次干道&	2&			不分离\\
-				B-H&	主干道&	4&			分离\\
-				其余小区内道路	&	支路&		2&			不分离\\
+				D-K&				主干道&	4&		分离\\
+				A-F&				主干道&	4&		分离\\
+				E-C&				次干道&	2&		不分离\\
+				G-I&				次干道&	2&		不分离\\
+				B-H&				主干道&	4&		分离\\
+				其余小区内道路	&		支路&		2&		不分离\\
 				\bottomrule[1pt]
 			\end{tabular} 
 		\end{table}
-		图中每条路段上的车流量我们通过Vissim模拟得到如表\ref{tab:car_flow_a}所示。
+		为了获得图中每条路段上的车流量我们通过Vissim模拟得到如表\ref{tab:car_flow_a}所示。
 		\begin{table}[!htbp]
 			\centering
 			\caption{路口机动车流量表}
@@ -355,11 +369,12 @@
 			\begin{tabular}{c|ccccccccc}
 				\toprule[1pt] 
 				路段&	D-A&	G-I&	B-G&	G-H&	A-B&	A-C&	C-F&	B-K&	C-E\\
-				流量&	4730&	2410&	3870&	4467&	6450&	7310&	4730&	3870&	1875\\
+				\hline
+				流量(pcu/h)&	4730&	2410&	3870&	4467&	6450&	7310&	4730&	3870&	1875\\
 				\bottomrule[1pt]
 			\end{tabular} 
 		\end{table}
-		在我国《城市道路工程设计规范》中给出了车道基本通行能力与设计通行能力值如表\ref{tab:road_flow}所示。
+		在我国《城市道路工程设计规范》中给出了车道基本通行能力与设计通行能力值如表\ref{tab:road_flow}所示。利用搜集到的数据，我们可以得到开放小区前后交通情况的比较得到结果如表\ref{tab:cmp_each}所示。
 		\begin{table}[!htbp]
 			\centering
 			\caption{一般等级道路路段一条车道的通行能力}
@@ -373,7 +388,39 @@
 				\bottomrule[1pt]
 			\end{tabular} 
 		\end{table}	
-
+		\begin{table}[!htbp]
+			\centering
+			\caption{小区开放与不开放对周边交通影响对比}
+			\label{tab:cmp_each}
+			\begin{tabular}{c|cccc}
+				\toprule[1pt] 
+				是否开放&	行程时间(h)&	统计距离(km)&	时间延误(h)&	平均速度(km/h)\\
+				\hline
+				开放& 22.67& 774.08& 55.25& 25.13\\
+				不开放& 21.32& 771.86& 54.73& 26.08\\
+				\bottomrule[1pt]
+			\end{tabular} 
+		\end{table}			
+		\subsubsection{考察是否出现Braess悖论}
+			由于Braess悖论的存在对于开放的小区我们应该考量开放之后的道路结构是否不会发生Braess悖论，根据上文中所得的数据可以求出所需参数，得到的参数如表\ref{tab:braess_args}，将表中参数带入\eqref{eq:time_final}得到$\gamma$和$\delta$两个系数，将数据带入\eqref{eq:Q_low}与\eqref{eq:Q_high}最终得出是否发生Braess悖论的判断。
+			\begin{table}[!htbp]
+				\centering
+				\caption{改进BPR公式参数表}
+				\label{tab:braess_args}
+				\begin{tabular}{c|ccccccc}
+					\toprule[1pt] 
+					路径&	$t_0(s)$&	$W_1(m)$&	$W_2(m)$&	v/c&	$q_b$& $Q_b$&	$t_d$(s)\\
+					\hline
+					B-A& 77.68& 3.0& 5.0& 0.85& 776&800&25.71\\
+					B-J& 59.38& 3.0& 5.0& 0.34& 1120&1000&32.35\\
+					J-G& 25.63&	3.0& 5.0& 0.31& 988& 1000&15.36\\
+					G-L& 48.51& 2.0& 3.0& 0.56& 668& 700&6.12\\
+					L-M& 59.02& 2.0& 3.0& 0.43& 774& 700&6.34\\
+					L-J& 33.80& 2.0& 3.0& 0.65& 869& 700&5.51\\
+					\bottomrule[1pt]
+				\end{tabular} 
+			\end{table}
+			由表\ref{tab:braess_args}，代入\eqref{eq:time_total}得到各自的阻抗参数
 %		综合问题一的评价模型建立元胞自动机模型
 %		\begin{equation}
 %			A=(L,d,S,N,f)
@@ -385,6 +432,21 @@
 		  根据问题一、问题二中所涉及的与周边道路有关的因素，考虑小区开放前后路网变化引起的流量变化情况、行人等非机动车对机动车干扰导致道路通行时间变化情况、新增路口处道路通行状况及交通流量分配状况
 
 		通行过程中所需时间、交通流量和交通流量分配情况，对周边道路是否产生积极促进作用，是否对现有交通状况起到改善作用，以判定该小区是否应该开放及开放道路情况。
+		
+  \section{模型评价}
+	  \subsection{优点}
+		  \begin{enumerate}
+		  	\item 基于美国联邦公路局路阻函数，并考虑延误时间和道路上行人和非机动车的干扰，得到改进BPR函数，更贴近生活实际，结果更具有说服力。
+		  	\item 根据现有道路网络，构建交通分配模型，并对两种分配模型：用户平衡与系统最优进行对比分析，结合实际问题，选择更接近模型的系统最优分配，使交通流量分配更合理，道路网路效率更高。
+		  	\item 引入Braess悖论，并建立基于系统最优分配 Braess 悖论的判别条件，精确地确定交通流量大小对通行效率的影响，更便于确定能对周边道路产生积极影响的新增道路数目范围。
+		  	\item 运用Vissim 软件仿真得到道路上的车流量数据
+		  \end{enumerate}
+	  \subsubsection{不足}
+		  \begin{enumerate}
+			  \item 所构建的小区类型种类偏少，不能完全涵盖小区类型，有待进一步考究国内小区的类型。
+			  \item 某一路径上的延误时间受交通分配的影响，不能仅以各路段上的延误时间简单加和求得数学化的计算公式。
+		  \end{enumerate}
+	\section{模型改进}
   \newpage
   \bibliography{mybib}
   \bibliographystyle{gbt7714}
