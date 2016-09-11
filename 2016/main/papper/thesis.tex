@@ -6,8 +6,10 @@
 %\usepackage{overcite}
 \usepackage{url}
 \usepackage{listings}
+\usepackage{xcolor}
 \usepackage{CJK}
 \usepackage{booktabs} 
+\usepackage{ listings} 
 \pagestyle{plain}
 \usepackage{bm}
 \usepackage{amsmath}
@@ -17,7 +19,7 @@
 \newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
 \renewcommand{\eqref}[1]{公式 (\ref{#1})}
 \renewcommand*{\baselinestretch}{1.38}
-
+\renewcommand{\appendixname}{Appendix~\Alph{section}}
 \begin{document}
   \begin{center}
   	\zihao{3}{\heiti 小区开放对道路通行的影响}
@@ -27,18 +29,18 @@
   	\zihao{4}{\heiti 摘\ \ \ \ 要}
   \end{center}
   \zihao{4}{\songti 
-  	\quad \quad 本文对小区开放问题产生的影响进行研究，以考察小区开放对路网优化、道路通行能力提升、交通状况改善的效果为主要目标，从道路结构、交通流量、人为因素等角度出发，对不同影响因素逐一分析并建立相应的数学模型，定量分析小区开放对周边道路通行的影响。
+  	\quad \quad 本文对小区开放问题产生的影响进行研究，以考察小区开放对路网优化、道路通行能力提升、交通状况改善的效果为主要目标，从道路结构、交通流量、人为因素等角度出发，引入模拟综合评价模型、Breass悖论、路阻函数及交通分配模型对不同影响因素逐一、详细、数学化分析，并建立相应的数学模型，最后利用Vissim软件仿真，对所建立的数学模型真实化，定量分析小区开放对周边道路通行的影响。
   	
-  	对于问题一，通过对国内外开放小区与封闭型小区的对比，分析小区开放对周边道路产生的影响，建立影响因素与道路、交通条件的关系，进而确定小区开放对周边道路的影响因素，即路网变化、行人等非机动车、新增路口三个因素会对周边道路通行产生影响。通过构建模糊综合评价模型，建立各影响因素对周边道路通行影响程度的关系矩阵，构建评价指标体系。
+  	对于问题一，通过分析小区开放对周边道路产生的影响，建立影响因素与道路、交通条件的关系，进而确定小区开放对周边道路的影响因素，即路网变化、行人等非机动车、新增路口三个因素对周边道路通行产生的影响。在构建评价指标的过程中，通过建立模糊综合评价模型，得到模糊评判矩阵，构建评价指标体系。
 
-	对于问题二，根据评价指标模型中小区开放对周边道路通行的影响因素，考虑车辆通行过程中所需时间、交通需求和交通流量分配三个因素，建立车辆通行的数学模型，以研究小区开放对周边道路通行的影响。其中车辆通行所需总时间可由延误时间和行驶时间构成，利用基于breass悖论判别系统，判别交通需求的变化是否产生breass悖论现象。通过动态交通分配分析最优的交通流量分布模式，并对交通需求进行合理配置。                 
+	对于问题二，根据评价指标模型中小区开放对周边道路通行的影响因素，考虑车辆通行过程中阻抗函数、交通流量分配及交通需求，建立车辆通行的数学模型，以研究小区开放对周边道路通行的影响。其中阻抗函数考察交通信号灯的延误和加入行人非机动车的干扰因素的BPR函数；交通流量由Breass悖论对范围加以限制；对比分析两种不同流量分配模型，确定应用系统最优分配模型达到最优交通流量分布模式。    
 
-	对于问题三，构建三种不同类型的小区，综合问题一中的评价模型，建立元胞自动机模型对三种不同类型的小区进行仿真模拟，以真实可靠的数据结果验证该类型小区是否适合开放及开放后产生的影响。
+	对于问题三，构建三种不同类型的小区，结合公路等级、一般等级道路路段通行能力，通过Vissim软件对每条路段上的车流量进行仿真，并将仿真结果与改进后的 BPR 公式所得结果比较，判定小区开放影响。
 
 	最后，通过对小区开放影响的研究，就小区开放前后对周边影响程度，结合评价指标，向城市规划和交通管理部门提出小区开放的建议，以实现小区开放后路网结构得以优化、道路通行能力提高、交通状况改善的目的。
 
   }
-  \textbf{关键词：}\ 模糊评价\ BPR函数
+  \textbf{关键词：}\ 模糊评价\ BPR函数\ VISSIM仿真\ 交通分配
   \newpage
   \section{问题重述}
 	基于“适用、经济、绿色、美观”的理念，为塑造城市良好风貌，缓解城市交通压力，促进土地节约利用，实现内部道路公共化，实现城市有序建设、适度开发、高效运行，近来，国务院发布的《关于进一步加强城市规划建设管理工作的若干意见》中指出，原则上不允许再建设封闭式小区，已建成的单位大院和住宅小区要逐步实现开放。此政策的颁布，引起了广泛的关注和讨论。
@@ -139,7 +141,8 @@
 				\end{array}
 				\right]
 			$$
-			其中$ r_{ij} $表示$ u_i $关于$ v_j $的隶属程度，则$ (U,V,R) $构成一个模糊评价模型，利用层次分析的方法确定各项因素的权重，比较影响因素集U中的元素，得到比较矩阵为：
+			其中$ r_{ij} $表示$ u_i $关于$ v_j $的隶属程度，则$ (U,V,R) $构成一个模糊评价模型，
+			利用层次分析的方法确定各项因素的权重，比较影响因素集U中的元素，得到判别矩阵为：
 			$$
 				C=\left[
 				\begin{array}{cccc}
@@ -149,7 +152,15 @@
 				\end{array}
 				\right]
 			$$
+			
 			得到C的特征向量$ D=[-0.9281,-0.1747,-0.3288] $，将向量标准化之后为$ D'=[0.6483 0.1220,0.2297]^Z $
+			在得到判别矩阵后需要进行一致性检验。
+			计算一致性指标
+			$$CI=\frac{\lambda_{max}-n}{n-1},\quad\lambda_{max}=\frac{1}{n}\sum\limits_{i=1}^{n}\frac{(CD)_i}{d_i}$$
+			
+			根据平均随机一致性指标RI表，确定一致性指标值RI，其中随机一致性指标的计算由500个随机构造的成对比较矩阵的一致性指标的平均值求得，
+			计算一致性比例CR并对CI的一致性进行判断
+			CR=0表示判别矩阵完全符合一致性；CR<0.1表示判别矩阵的一致性在可接受范围之内；CR>0.1则表示判别矩阵的一致性不能保证，需重新构造判别矩阵。
 			则评价模型中的权重因素记为$A$并且令$ A=D' $，满足$ \sum\limits_{i=1}^{3}a_i=1 $，
 			综合评价为：
 			\begin{equation}
@@ -195,7 +206,20 @@
 			\end{equation}
 			其中$ T $表示信号灯周期长度，$ t_g $代表绿灯时间，$ v,c $代表最大交通量与基本交通量。
 			
-			并且，开放小区后必然会增加某些路口，而开放新的的路口又会增大道路的延误时间，因此为了了解开放路口对周边道路的影响，我们需要对支路与街区道路的接口进行分析，对于最终对周边道路的影响我们使用Vissim软件进行仿真模拟。
+			并且，开放小区后必然会增加某些路口，如图\ref{fig:cross_t}所示，而开放新的的路口又会增大道路的延误时间，因此为了了解开放路口对周边道路的影响，我们需要对支路与街区道路的接口进行分析，对于最终对周边道路的影响我们使用Vissim软件进行仿真模拟，Vissim是由德国PTV公司发布的用于交通仿真的仿真软件，广泛用于有关交通系统的模拟之中，其操作界面如图\ref{fig:vissim_ui}所示。
+			\begin{figure}[!htbp]
+				\centering
+				\subfigure[十字交叉口]{\includegraphics[width=0.4\textwidth]{pic/cross.jpg}}
+				\subfigure[丁字交叉口]{\includegraphics[width=0.4\textwidth]{pic/T.jpg}}
+				\caption{两种不同的交叉路口}
+				\label{fig:cross_t}
+			\end{figure}
+			\begin{figure}[!htbp]
+				\centering
+				\includegraphics[width=0.7\textwidth]{pic/vissim_ui.jpg}
+				\caption{VISSIM软件}
+				\label{fig:vissim_ui}
+			\end{figure}
 		\subsubsection{改进道路阻抗模型}
 					
 			目前广泛使用的路阻函数是美国联邦公路局路阻函数(即BPR函数)如\eqref{eq:bpr_plain}所示。
@@ -218,13 +242,13 @@
 					\bottomrule[1pt]
 				\end{tabular}
 			\end{table}
-			新开放的小区路线一般为双向两车道的城市支路，车流量的构成十分复杂，具有大量行人与非机动车干扰，当非机动车的流量没有超过道路通行能力时，非机动车对机动车的影响系数取0.8，而当非机动车的流量超过道路通行能力时非机动车对车辆的影响系数由\eqref{eq:bike}得到。Vissim是由德国PTV公司发布的用于交通仿真的仿真软件，广泛用于有关交通系统的模拟之中。
+			新开放的小区路线一般为双向两车道的城市支路，车流量的构成十分复杂，具有大量行人与非机动车干扰，当非机动车的流量没有超过道路通行能力时，非机动车对机动车的影响系数取0.8，而当非机动车的流量超过道路通行能力时非机动车对车辆的影响系数由\eqref{eq:bike}得到。
 			\begin{equation}
 				\eta_b = 0.8-\frac{(q_b/Q_b+0.5-W_2)}{W_1}
 				\label{eq:bike}
 			\end{equation}
-			其中$ \eta_b $非机动车干扰系数，$ q_b $非机动车流量，$ Q_b $非机动车道通行能力，$ W_1,W_2 $
-			非机动车道宽度与机动车道宽度。
+			其中$ \eta_b $表示非机动车干扰系数，$ q_b $表示非机动车流量，$ Q_b $表示非机动车道通行能力，$ W_1,W_2 $
+			表示非机动车道宽度与机动车道宽度。
 			
 			综上所述，得到改进BPR路阻函数如\eqref{eq:bpr_imporve}。
 			\begin{equation}
@@ -238,7 +262,7 @@
 			\end{equation}			
 			则\eqref{eq:time_total}可以表示为\eqref{eq:time_final}所示形式。
 			\begin{equation}
-				T=\left\lbrace
+				r=\left\lbrace
 				\begin{array}{ll}
 					t_0(1+\alpha(\frac{qv}{c\eta\eta_b})^\beta)+\frac{0.5T(1-\frac{t_g}{T})}{1-[min(1,v/c)\cdot{\frac{t_g}{T}}]}, & 0\leq\eta_b\leq1\\
 					t_0(1+\alpha(\frac{\eta_bqv}{c\eta})^\beta)+\frac{0.5T(1-\frac{t_g}{T})}{1-[min(1,v/c)\cdot{\frac{t_g}{T}}]}, & 1\leq\eta_b
@@ -261,7 +285,7 @@
 			{100} + 45 $，达到均衡之后有$ A=B=2000 $这样每条路通过的时间都是$ \frac{2000}{100}
 			+45=65 $分钟。
 		
-			现在考虑$ B \rightarrow C $开通之后，其通过时间非常短，在这种情况下，所有司机都会选择$ A \rightarrow B \rightarrow C \rightarrow D $这条路线，因为即使所有车辆全部通过$ A \rightarrow B $所用时间也不超过40分钟，这样所有通过这条路径的时间为$ \frac{4000}{100}\times 2+10=90$分钟，Braess悖论便是指这种情况。		
+			现在考虑$ B \rightarrow C $开通之后，其通过时间非常短，在这种情况下，所有司机都会选择$ A \rightarrow B \rightarrow C \rightarrow D $这条路线，因为即使所有车辆全部通过$ A \rightarrow B $所用时间也不超过40分钟，这样所有通过这条路径的时间为$ \frac{4000}{100}\times 2+10=90$分钟，综上我们发现，虽然在原有交通网络中加入了新的路径，然而却没有减少网络的阻抗，Braess悖论便是指这种情况。		
 		\subsubsection{交通分配模型}
 			交通分配是指根据现有道路网络，按照一定规则将进入交通网络的流量合理地分配道网络中的各个道路上，并由此得到网络中各个路段的数据，每种不同的规则对应着不同的分配方法\upcite{陆化普1996动态交通分配理论的回顾与展望}。
 			下面对比两种重要的交通分配模型：用户平衡与系统最优\upcite{陆化普2006交通规划理论与方法}。
@@ -279,11 +303,7 @@
 			\begin{equation}
 				\begin{array}{c}
 					\hat{R_p}(Q^*)=\nu_w,\quad Q_p^* > 0\\
-				
-				
-				1.
-				
-				2.		\hat{R_p}(Q^*)\leq\nu_w,\quad Q_p^* = 0
+					\hat{R_p}(Q^*)\leq\nu_w,\quad Q_p^* = 0
 				\end{array}
 				\label{eq:so_equation}
 			\end{equation}
@@ -291,7 +311,7 @@
 		\subsubsection{基于系统最优分配Braess悖论的判别}
 			小区开放相当于在原有的交通网络中再次加入新的网络，其中必然会存在某些情况导致Braess悖论的发生，而出现这种情况时不宜开放小区。
 			
-			查阅论文可知Pas和Principcipio在其论文中指出了Braess悖论不发生的两种情况\upcite{pas1997braess}，一种是交通需求量低时，如\eqref{eq:Q_low}，另一种时交通需求量高时\eqref{eq:Q_high}，当交通量符合上述两种情况时，不发生Braess现象，其中$\gamma_n$与$\delta_n$分别为总阻抗函数的常数项系数与一次项系数。
+			查阅论文可知Pas和Principcipio在其论文中指出了Braess悖论不发生的两种情况\upcite{pas1997braess}，一种是交通需求量低时，如\eqref{eq:Q_low}，另一种时交通需求量高时如\eqref{eq:Q_high}，当交通量符合上述两种情况时，不发生Braess现象，其中$\gamma_n$与$\delta_n$分别为总阻抗函数的常数项系数与一次项系数。
 			\begin{equation}
 				Q<\frac{2(\gamma_1-\gamma_2)}{3\delta_1+\delta_2}
 				\label{eq:Q_low}
@@ -302,14 +322,14 @@
 			\end{equation}
 	\subsection{问题三}
 		
-		在城市交通中，交通网络通行能力的大小会受到一路段或某一路口的影响于，一般道路等级高的路段会有更多的容纳能力，根据《城市道路工程设计规范》我国城市公路分级如表\ref{tab:road_type}所示。
+		在城市交通中，交通网络通行能力的大小会受到某一路段或某一路口的影响于，一般道路等级高的路段会有更多的容纳能力，根据《城市道路工程设计规范》我国城市公路分级如表\ref{tab:road_type}所示。
 		\begin{table}[!htbp]
 			\centering
 			\caption{公路等级类型表}
 			\label{tab:road_type}
 			\begin{tabular}{c|ccc}
 				\toprule[1pt]
-				项目级别&设计车速(km/h)&单向机动车道数（条)&分隔带设置\\
+				道路级别&设计车速(km/h)&单向机动车道数（条)&分隔带设置\\
 				\hline
 				快速路	&60-100	&$\geq$4	&必须设\\
 				主干路	&40-60	&$\geq$4	&应设\\
@@ -400,7 +420,9 @@
 				不开放& 21.32& 771.86& 54.73& 26.08\\
 				\bottomrule[1pt]
 			\end{tabular} 
-		\end{table}			
+		\end{table}		
+		
+		对表\ref{tab:cmp_each}中数据进行分析，封闭式小区转为开放式小区后，交通网络的通行能力获得了一定提升，网络中的时间延误减少，车辆的平均速度也有所提升，综合以上数据可以确定开放小区道路对周围交通网络有提升作用，同理对于其他两种类型小区也可以采用同样的方法得到最终对比结果。由于Braess悖论我们还需要确定每条开放的道路不会对整个交通网络带来负面作用，因此我们应进一步讨论在开放的路网中是否出现了Braess悖论。	
 		\subsubsection{考察是否出现Braess悖论}
 			由于Braess悖论的存在对于开放的小区我们应该考量开放之后的道路结构是否不会发生Braess悖论，根据上文中所得的数据可以求出所需参数，得到的参数如表\ref{tab:braess_args}，将表中参数带入\eqref{eq:time_final}得到$\gamma$和$\delta$两个系数，将数据带入\eqref{eq:Q_low}与\eqref{eq:Q_high}最终得出是否发生Braess悖论的判断。
 			\begin{table}[!htbp]
@@ -420,7 +442,33 @@
 					\bottomrule[1pt]
 				\end{tabular} 
 			\end{table}
-			由表\ref{tab:braess_args}，代入\eqref{eq:time_total}得到各自的阻抗参数
+			由表\ref{tab:braess_args}，代入\eqref{eq:time_total}得到各自的阻抗参数如下：
+			$$r_{AB}=103.39+2.9184q_{AB}$$
+			$$r_{BJ}=91.73+0.0674q_{BJ}$$
+			$$r_{JG}=40.99+0.051q_{JG}$$
+			$$r_{GL}=54.63+0.2204q_{GL}$$
+			$$r_{LM}=65.36+0.0629q_{LM}$$
+			$$r_{LJ}=39.31+0.2728q_{LJ}$$
+			\begin{table}[!htbp]
+				\centering
+				\caption{Braess悖论判断参数表}
+				\label{tab:braess_judge}
+				\begin{tabular}{c|cc|c|cc}
+					\toprule[1pt] 
+					路径&	$\gamma_n$&	$\delta_n$&	路径&	$\gamma_n$&	$\delta_n$\\
+					\hline
+					B-A& 103.39& 0.0284& G-L& 54.63& 0.2204\\
+					B-J& 91.73& 0.0674& L-M& 65.36& 0.0629\\
+					J-G& 40.99&	0.051& L-J& 39.31& 0.2728\\
+					\bottomrule[1pt]
+				\end{tabular} 
+			\end{table}
+			将表\ref{tab:braess_judge}中相关参数带入\eqref{eq:Q_low}与\eqref{eq:Q_high}中可以得到：
+			$$L-M:\qquad Q>27 or Q<9 $$
+			$$L-J:\qquad 102<Q<510 $$
+			$$G-L:\qquad Q>161 or Q<33 $$
+			通过以上计算可知三条支路均未发生Braess现象，开放此小区可以提升周边道路通行能力。
+			
 %		综合问题一的评价模型建立元胞自动机模型
 %		\begin{equation}
 %			A=(L,d,S,N,f)
@@ -435,20 +483,51 @@
 		
   \section{模型评价}
 	  \subsection{优点}
+		  本文研究小区开放的影响，在构建评价指标的过程中，运用了模拟综合评价模型；在建立车辆通行的数学模型中，引用Breass悖论、路阻函数及交通分配模型；对构建的小区进行具体分析评价过程中，通过Vissim软件仿真模拟交通流量，将模型应用于实际，从而对模型的合理性进行检验。本文对于城市规划和交通管理部门对小区开放的影响具有一定的参考价值是实际应用的作用，但是仍然存在些许不足，有待进一步的改进和深层次的研究。
 		  \begin{enumerate}
 		  	\item 基于美国联邦公路局路阻函数，并考虑延误时间和道路上行人和非机动车的干扰，得到改进BPR函数，更贴近生活实际，结果更具有说服力。
 		  	\item 根据现有道路网络，构建交通分配模型，并对两种分配模型：用户平衡与系统最优进行对比分析，结合实际问题，选择更接近模型的系统最优分配，使交通流量分配更合理，道路网路效率更高。
 		  	\item 引入Braess悖论，并建立基于系统最优分配 Braess 悖论的判别条件，精确地确定交通流量大小对通行效率的影响，更便于确定能对周边道路产生积极影响的新增道路数目范围。
-		  	\item 运用Vissim 软件仿真得到道路上的车流量数据
+		  	\item 运用Vissim 软件仿真得到道路上的车流量数据，便于对模型的实用性和可行性进行考究，并对所构建的小区开放前后的影响数字化，便于数据分析和对比，更能突出小区开放产生的影响的效果。
 		  \end{enumerate}
 	  \subsubsection{不足}
 		  \begin{enumerate}
 			  \item 所构建的小区类型种类偏少，不能完全涵盖小区类型，有待进一步考究国内小区的类型。
 			  \item 某一路径上的延误时间受交通分配的影响，不能仅以各路段上的延误时间简单加和求得数学化的计算公式。
+			  \item 实际交通流量与所监测的时间点、道路状况、交通流量分配有密切的关系，与道路实际交通流量相吻合、准确反映实际道路状况的数据获取难度较大，因而所建模型具有一定程度的理想性。
 		  \end{enumerate}
 	\section{模型改进}
+		本文利用Vissim软件进行仿真，且Vissim在交通仿真领域
   \newpage
   \bibliography{mybib}
   \bibliographystyle{gbt7714}
+  \newpage
+  \appendix
 
+  \section{程序}
+  \subsection{求路阻参数}
+  \begin{lstlisting}[language=MATLAB] 
+clc,clear
+zou=0.15;
+alfa=[77.68 59.38 25.63 48.51 59.02 33.8];
+W1=[3 3 3 2 2 2];
+W2=[5 5 5 3 3 3];
+V_c=[0.85 0.34 0.31 0.56 0.43 0.65];
+q=[776 1120 988 668 774 869];
+Q=[800 1000 1000 700 700 700];
+t=[25.71 32.35 15.36 6.12 6.34 5.51];
+b=alfa+tyeta=0.8-(q./Q+0.5-W2)./W1;n=[0 0 0 0 0 0];
+for i=1:length(t)
+	if yeta>1
+		n(i)=zou*(yeta(i)*V_c(i)/0.8)^4;
+	else
+		n(i)=zou*(V_c(i)/0.8/yeta(i))^4;
+	end
+end
+n
+  \end{lstlisting}
+  \subsection{求路阻参数}
+  \begin{lstlisting}[language=MATLAB]
+  
+  \end{lstlisting}
 \end{document}
