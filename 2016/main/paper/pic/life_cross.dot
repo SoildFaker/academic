@@ -1,0 +1,9 @@
+digraph life {
+  graph [nodesep=1,ranksep=1,ratio="compress",size=10];
+  node [shape=record];
+  struct1 [pos="0,2!",xlabel=" 交叉源 ",label=" 起始位置 | 下一位置 |...|<f0> 第K位置 |...|<f1> 第K+L位置 | 结束位置"];
+  struct3 [pos="1,1!",label="<f0> 第K位置 |...| 第K+L位置 "];
+  struct2 [pos="0,0!",xlabel=" 交叉对象 ",label=" 起始位置 | 下一位置 |...|<f0> 第N位置 |...| 第N+L位置 | 结束位置"];
+  struct1:f0 -> struct3:f0 [label=" 取出序列 "];
+  struct3:f0 -> struct2:f0 [label=" 插入序列 "];
+}

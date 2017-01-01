@@ -1,0 +1,6 @@
+digraph life {
+  node [shape=record];
+  struct1 [label=" 起始位置 | 下一位置 |...|<f0> 第K位置 |...|<f1> 第N位置 | 结束位置"];
+  struct1:f0 -> struct1:f1 [label=" 交换 "];
+  struct1:f1 -> struct1:f0;
+}

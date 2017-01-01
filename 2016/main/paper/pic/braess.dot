@@ -1,0 +1,8 @@
+digraph braess {
+rankdir = LR;  
+    A -> B [ label="t=T/100" ]
+    B -> D [ label="t=45" ]
+    A -> C [ label="t=45" ]
+    C -> D [ label="t=T/100" ]
+    B -> C [ label="t=10", style="dashed"]
+}

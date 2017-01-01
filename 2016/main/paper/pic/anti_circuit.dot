@@ -1,0 +1,27 @@
+digraph flow1 {
+  node [shape=record]
+  start [label=" 开始 ",shape="box", style=rounded];
+  init [label=" 初始化 "];
+  times [label=" 迭代次数 "];
+  anti1 [label=" 蚂蚁\ k=1 "];
+  anti2 [label=" 蚂蚁\ k=k+1 "];
+  pos1 [label=" 按照状态转移概率公式选择下一个元素 "];
+  table [label=" 修改禁忌表 "];
+  switch1 [label=" k\>= 蚂蚁总数 m? ",shape="diamond", style=""];
+  update [label=" 按照公式进行信息量更新"];
+  switch2 [label=" 满足条件? ",shape="diamond", style=""];
+  end [label=" 输出计算结果 ",shape="box", style=rounded];
+
+  start -> init
+  init -> times [label=""]
+  times -> anti1
+  anti1 -> anti2
+  anti2 -> pos1
+  pos1 -> table
+  table -> switch1
+  switch1 -> update [label="Yes"]
+  switch1 -> anti2 [label="NO"]
+  update -> switch2
+  switch2 -> times [label="No"]
+  switch2 -> end [label="Yes"]
+}

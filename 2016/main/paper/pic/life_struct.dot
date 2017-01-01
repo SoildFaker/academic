@@ -1,0 +1,4 @@
+digraph life {
+  node [shape=record];
+  struct [label=" 起始位置 | 下一位置 | \ \ ... \ \ | 结束位置"];
+}
