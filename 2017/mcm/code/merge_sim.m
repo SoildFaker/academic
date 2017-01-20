@@ -26,12 +26,12 @@ function merge_sim()
     in_flow = 0;
     HI = [];
     hold on
-    for t=0:250
+    for t=0:5500
     for i=1:C
         for j=1:L
             if (i == 1)
-                if (Q(j,i+1)<2)
-                    in = 10*rand*calv(Q(j,i+1));
+                if (Q(j,i)<5)
+                    in = 5*rand*calv(Q(j,i));
                     Q(j,i) = Q(j,i)+in;
                     %in_flow = in_flow + in;
                     cur_flow = cur_flow + in;
@@ -42,7 +42,7 @@ function merge_sim()
             end
             if (area(j,i) == 2)
                 if(i==C)
-                    div = Q(j,i) * calv(Q(j,i));
+                    div = Q(j,i) * (1/(Q(j,i-1)+1));
                     Out = Out + div;
                     s = s + Out;
                     cur_flow = cur_flow - div;
@@ -83,43 +83,51 @@ function merge_sim()
 end
 
 function [q,qd,ql]=flow_div(q,qd,ql)
-    k1 = 0.5;
-    v=calv(q);
-    vd=calv(qd);
-    vl=calv(ql);
+    v=calv(ql);
+    %vd=calv(qd);
+    %vl=calv(ql);
     dq = v*q;
-    div = dq*(k1/(qd+1));
-    qd = qd+vd*div;
-    ql = ql + vl*(dq-div);
     q = q-dq;
+    u = calu(qd);
+    div = dq*u;
+    qd = qd+div;
+    ql = ql + (dq-div);
     return
 end
 
 function [q,qf]=flow_forward(q,qf)
-    k1 = 0.5;
-    v=calv(q);
-    vf=calv(qf);
+    v=calv(qf);
+    %vf=calv(qf);
     dq = v*q;
     q = q-dq;
-    div = dq*(k1/(qf+1));
-    qf = qf+vf*div;
+    qf = qf+dq;
     return
 end
 
 function [qu,q]=flow_updown(q,qu)
-    k1 = 0.5;
-    v=calv(q);
-    vu=calv(qu);
-    dq = v*q;
+    u=calu(qu);
+    %vu=calv(qu);
+    dq = u*q;
     q = q-dq;
-    div = dq*(k1/(qu+1));
-    qu = qu+vu*div;
+    qu = qu+dq;
+    return
+end
+
+function u=calu(q)
+    k2=5;
+    u=k2/(q+k2);
+    if(u<0.1)
+        u=0;
+    end
     return
 end
 
 function v=calv(q)
-    k2=0.5;
-    v=k2/(q+1);
+    k2=2;
+    v=k2/(q+k2);
+    if(v<0.1)
+        v=0.001;
+    end
     return
 end
 
