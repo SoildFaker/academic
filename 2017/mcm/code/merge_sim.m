@@ -26,12 +26,12 @@ function merge_sim()
     in_flow = 0;
     HI = [];
     hold on
-    for t=0:100
+    for t=0:500
     for i=1:C
         for j=1:L
             if (i == 1)
                 if (Q(j,i)<3 && rand > 0.8)
-                    in = 4.5*(poisspdf(j,L/2));%* calv(Q(j,i))
+                    in = 4.8*(poisspdf(j,L/2));%* calv(Q(j,i))
                     Q(j,i) = Q(j,i)+in;
                     %in_flow = in_flow + in;
                      cur_flow = cur_flow + in;
@@ -76,10 +76,13 @@ function merge_sim()
     %draw_m(Q);
     %plot(HI);
     plot(SUM);
+    title('Sum out');
     subplot(3,1,2);
     plot(HF);
+    title('flow in plaza');
     subplot(3,1,3);
     plot(HO);
+    title('current out flow');
     pause(0.01);
     end
     s
