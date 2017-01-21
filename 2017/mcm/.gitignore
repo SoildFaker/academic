@@ -2,3 +2,4 @@ templates
 *.m~
 reference
 test
+*.synctex.gz
