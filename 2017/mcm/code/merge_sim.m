@@ -26,12 +26,14 @@ function merge_sim()
     in_flow = 0;
     HI = [];
     hold on
-    for t=0:5500
+    for t=0:550
+        r=0.1*rand*poissrnd(9,1,9);
+        r2 = 10 * rand;
     for i=1:C
         for j=1:L
-            if (i == 1)
-                if (Q(j,i)<5)
-                    in = 5*rand*calv(Q(j,i));
+            if (i == 1 )
+                if (r2>5 && Q(j,i)<2)
+                    in = r(j);
                     Q(j,i) = Q(j,i)+in;
                     %in_flow = in_flow + in;
                     cur_flow = cur_flow + in;
@@ -42,7 +44,7 @@ function merge_sim()
             end
             if (area(j,i) == 2)
                 if(i==C)
-                    div = Q(j,i) * (1/(Q(j,i-1)+1));
+                    div = Q(j,i) * max(calv(Q(j,i)),0.5);
                     Out = Out + div;
                     s = s + Out;
                     cur_flow = cur_flow - div;
@@ -80,6 +82,7 @@ function merge_sim()
     plot(HO);
     pause(0.01);
     end
+    s
 end
 
 function [q,qd,ql]=flow_div(q,qd,ql)
@@ -105,7 +108,7 @@ function [q,qf]=flow_forward(q,qf)
 end
 
 function [qu,q]=flow_updown(q,qu)
-    u=calu(qu);
+    u=1.1*calu(qu);
     %vu=calv(qu);
     dq = u*q;
     q = q-dq;
@@ -114,19 +117,19 @@ function [qu,q]=flow_updown(q,qu)
 end
 
 function u=calu(q)
-    k2=5;
-    u=k2/(q+k2);
-    if(u<0.1)
+    k2=0.1;
+    u=0.9*((k2/(q+k2))^2);
+    if (u<0.05)
         u=0;
     end
     return
 end
 
 function v=calv(q)
-    k2=2;
-    v=k2/(q+k2);
-    if(v<0.1)
-        v=0.001;
+    k2=0.3;
+    v=0.9*((k2/(q+k2))^2);
+    if (v<0.05)
+        v=0;
     end
     return
 end

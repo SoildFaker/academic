@@ -3,7 +3,7 @@ function draw_road()
     hold on;
     al=10;
     bl=3;
-    cl=19;
+    cl=8;
     ay1=-2;
     ay2=4;
     by1=0;
@@ -13,7 +13,7 @@ function draw_road()
     bp1=[al+cl,by1];
     bp2=[al+cl,by2];
     rectangle('Position',[0 -2.25 2 abs(ay2)+abs(ay1)+0.5],'Curvature',0.2,'LineWidth',6);
-    axis([0,al+cl+bl,0,40])
+    axis([0,(al+cl+bl),-20,20])
     plot([0,al], [ay1,ay1],'k','LineWidth',6);
     plot([0,al], [ay2,ay2],'k','LineWidth',6);
     plot([al+cl,al+cl+bl], [by1,by1],'k','LineWidth',6);

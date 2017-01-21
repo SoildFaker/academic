@@ -4,6 +4,7 @@
         sheet = true, titleinsheet = true, keywordsinsheet = true,
         titlepage = true, abstract = true}
 \usepackage{palatino}
+\usepackage{subfigure}
 \usepackage{lipsum}
 \title{Modeling merge after toll}
 %\author{\small Tom}
@@ -17,7 +18,26 @@ keyword1; keyword2
 \end{abstract}
 \maketitle
 \section{Introduction}
-%考虑三种合并方式，直接合并，经过一段直路后再合并。合并区域的长度，对合并时间的影响。合并区域以平滑曲线过渡，面积可近似看为梯形。边沿车道向导出车道合并时所用时间由合并边的斜率决定。
+Toll merge area 
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{merge_area.eps}
+	\caption{merge area}
+	\label{fig:merge_area}
+\end{figure}
+
+%我们考虑了三种合并方式，直接合并，单侧多次合并，双侧多次合并，示意图如下：
+We had considered 3 way to merge, 1) direct merge, 2) single side multiple merge, 3) double side multiple merge.
+\begin{figure}[!htbp]
+	\centering
+	\subfigure[direct merge]{\includegraphics[width=0.3\textwidth]{ws_merge.eps}}
+	\subfigure[single side multiple merge]{\includegraphics[width=0.3\textwidth]{ss_merge.eps}}
+	\subfigure[double side multiple merge]{\includegraphics[width=0.3\textwidth]{ds_merge.eps}}
+	\caption{merging ways}
+	\label{fig:merge_ways}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
 \item minimizes the discomfort to the hands, or
 \item maximizes the outgoing velocity of the ball.
