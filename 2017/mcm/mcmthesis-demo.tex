@@ -18,24 +18,8 @@ keyword1; keyword2
 \end{abstract}
 \maketitle
 \section{Introduction}
-Toll merge area 
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=0.5\textwidth]{merge_area.eps}
-	\caption{merge area}
-	\label{fig:merge_area}
-\end{figure}
+%如何将交通流量进行有效的合并是交通史上历来备受关注的问题，
 
-%我们考虑了三种合并方式，直接合并，单侧多次合并，双侧多次合并，示意图如下：
-We had considered 3 way to merge, 1) direct merge, 2) single side multiple merge, 3) double side multiple merge.
-\begin{figure}[!htbp]
-	\centering
-	\subfigure[direct merge]{\includegraphics[width=0.3\textwidth]{ws_merge.eps}}
-	\subfigure[single side multiple merge]{\includegraphics[width=0.3\textwidth]{ss_merge.eps}}
-	\subfigure[double side multiple merge]{\includegraphics[width=0.3\textwidth]{ds_merge.eps}}
-	\caption{merging ways}
-	\label{fig:merge_ways}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
@@ -81,11 +65,32 @@ The proof of theorem.
 \lipsum[7]
 
 \section{Analysis of the Problem}
+%设有如下高速公路收费站汇合区域，收费站有B个收费窗口，汇合到有L条车道的高速公路。
+Toll merge area show as \ref{fig:merge_area}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{merge_area.eps}
+	\caption{merge area}
+	\label{fig:merge_area}
+\end{figure}
+
+%我们考虑了三种合并方式，直接合并，单侧多次合并，双侧多次合并，示意图如下：
+We had considered 3 way to merge, 1) direct merge, 2) single side multiple merge, 3) double side multiple merge.
+\begin{figure}[!htbp]
+	\centering
+	\subfigure[direct merge]{\includegraphics[width=0.3\textwidth]{ws_merge.eps}}
+	\subfigure[single side multiple merge]{\includegraphics[width=0.3\textwidth]{ss_merge.eps}}
+	\subfigure[double side multiple merge]{\includegraphics[width=0.3\textwidth]{ds_merge.eps}}
+	\caption{merging ways}
+	\label{fig:merge_ways}
+\end{figure}
+%将路口分布看为离散化如下图
+%箭头的方向代表车流量可能的方向
 \begin{figure}[h]
 \small
 \centering
-\includegraphics[width=12cm]{mcmthesis-aaa.eps}
-\caption{aa} \label{fig:aa}
+\includegraphics[width=0.5\textwidth]{road_dis.eps}
+\caption{road discrete} \label{fig:road_dis}
 \end{figure}
 
 \lipsum[8] \eqref{aa}
