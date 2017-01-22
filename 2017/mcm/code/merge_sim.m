@@ -1,19 +1,19 @@
 
-function s=merge_sim()
+function SUM=merge_sim()
     area = [
         3 1 0 0 0 0 0 0 0 0 0 0 0;
-        3 3 1 3 1 0 0 0 0 0 0 0 0;
-        3 3 3 1 3 3 3 1 0 0 0 0 0;
-        3 3 3 3 1 3 3 3 3 3 1 0 0;
+        3 3 3 3 1 0 0 0 0 0 0 0 0;
+        3 3 3 3 3 3 3 1 0 0 0 0 0;
+        3 3 3 3 3 3 3 3 3 3 1 0 0;
         2 2 2 2 2 2 2 2 2 2 2 2 2;
         %2 2 2 2 2 2 2 2 2 2 2 2 2;
         2 2 2 2 2 2 2 2 2 2 2 2 2;
-        6 6 6 6 4 6 6 6 6 6 4 0 0;
-        6 6 6 4 6 6 6 4 0 0 0 0 0;
-        6 6 4 6 4 0 0 0 0 0 0 0 0;
+        6 6 6 6 6 6 6 6 6 6 4 0 0;
+        6 6 6 6 6 6 6 4 0 0 0 0 0;
+        6 6 6 6 4 0 0 0 0 0 0 0 0;
         6 4 0 0 0 0 0 0 0 0 0 0 0;
     ];
-    
+    auto = [0 0];
     [L,C]=size(area);
     Q = zeros(L,C);
     Out = 0;
@@ -31,14 +31,20 @@ function s=merge_sim()
         for j=1:round(L/2)
             cj=L-j+1;
             if (i == 1)
-                k = 3.4;
-                if (Q(j,i)<3)
+                if(rand>0.9)
+                    
+                end
+                k = 2.3;
+                if (calv(Q(j,i))>0.5)
                     in = k*(poisspdf(j,round(L/2+1)));%* calv(Q(j,i))
+                    if(j==4||j==5)
+                        in = in*1.4;
+                    end
                     Q(j,i) = Q(j,i)+in;
                     %in_flow = in_flow + in;
                      cur_flow = cur_flow + in;
                 end
-                if (Q(cj,i)<3)
+                if (calv(Q(cj,i))>0.5)
                     in = k*(poisspdf(cj,L/2));%* calv(Q(j,i))
                     Q(cj,i) = Q(cj,i)+in;
                     %in_flow = in_flow + in;
@@ -116,11 +122,15 @@ function s=merge_sim()
     subplot(3,1,3);
     plot(HO);
     title('current out q');
+    
     %draw_m(Q);
     %pause(0.01);
     end
+    hold off;
+    figure
+    hold on;
     %s
-    %draw_m(Q);
+    draw_m(Q);
     %matrixplot(Q,'DisplayOpt','off','FigSize','Auto','ColorBar','on');
 end
 
