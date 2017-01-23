@@ -1,5 +1,5 @@
 
-function SUM=merge_sim()
+function s=merge_sim()
     area = [
         3 1 0 0 0 0 0 0 0 0 0 0 0;
         3 3 3 3 1 0 0 0 0 0 0 0 0;
@@ -26,19 +26,16 @@ function SUM=merge_sim()
     in_flow = 0;
     HI = [];
     hold on
-    for t=0:45
+    for t=0:79
     for i=1:C
         for j=1:round(L/2)
             cj=L-j+1;
             if (i == 1)
-                if(rand>0.9)
-                    
-                end
-                k = 2.3;
+                k = 0.9;
                 if (calv(Q(j,i))>0.5)
                     in = k*(poisspdf(j,round(L/2+1)));%* calv(Q(j,i))
                     if(j==4||j==5)
-                        in = in*1.4;
+                        %in = in*1.4;
                     end
                     Q(j,i) = Q(j,i)+in;
                     %in_flow = in_flow + in;
@@ -56,7 +53,7 @@ function SUM=merge_sim()
             end
             if(cj == j)
                 if(i==C)
-                    div = Q(j,i) * calv(Q(j,i));
+                    div = Q(j,i) *calv(Q(j,i));
                     Out = Out + div;
                     s = s + Out;
                     cur_flow = cur_flow - div ;
@@ -126,16 +123,13 @@ function SUM=merge_sim()
     %draw_m(Q);
     %pause(0.01);
     end
-    hold off;
-    figure
-    hold on;
     %s
-    draw_m(Q);
+    %draw_m(Q);
     %matrixplot(Q,'DisplayOpt','off','FigSize','Auto','ColorBar','on');
 end
 
 function v=calv(q)
-    v=1/(1+exp(q*3-7));
+    v=2/(1+exp(q));
     %v=max(v,0.1);
     return
 end
@@ -171,7 +165,7 @@ function [q,qf]=flow_forward(q,qf)
 end
 
 function [q,qu]=flow_updown(q,qu)
-    k=0.5;
+    k=0.3;
     dq = k*q*calv(qu);
     q = q-dq;
     qu = qu+dq;

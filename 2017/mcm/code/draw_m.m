@@ -11,7 +11,7 @@ for x=1:l
         else
             m = max(0.1,M(x,y));
             a = 0.5*m/(1+0.5*m);
-            fill(fx,fy,[ 1-a 1 1-a]);
+            fill(fx,fy,[ 1 1 1-a]);
         end
     end
 end

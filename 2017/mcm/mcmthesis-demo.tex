@@ -8,6 +8,7 @@
 \usepackage[UTF8, nocap]{ctex}
 \usepackage{algorithm}
 \usepackage{algorithmicx}
+\usepackage{booktabs}
 \usepackage{algpseudocode}
 \usepackage{lipsum}
 \title{Modeling merge after toll}
@@ -40,21 +41,26 @@ keyword1; keyword2
 对于电子收费窗口，与不找零收费窗口，由于其通过速度快，可能反而会造成合并区域的拥堵现象\cite{spiliopoulou2009toll}。
 到目前为止，全世界绝大部分地区的收费方式存在人工收费窗口与电子收费窗口比例不协调的现象，这使得过多电子收费窗口闲置而人工收费窗口拥堵。通过收费窗口后，几乎所有收费广场都是采取扇形区域来实施汽车的合流，因此当遇到高峰时，收费广场拥堵现象仍然普遍存在。
 
-自动驾驶是一项新兴技术，随着自动驾驶汽车数量逐渐增加，由于自动驾驶技术的特性，道路容量将会下降
 
+An autonomous vehicle is a vehicle that is capable of sensing its environment by using a variety of techniques such as radar, lidar, GPS, odometry, and computer vision and navigating without human input. Those techniques can interpret sensory information to identify appropriate navigation paths, as well as obstacles and relevant signage to arrive the desired destination.\cite{wiki:autonomous}
+
+通常情况下，收费站有三种不同收费方式：传统收费方式、不找零收费方式和etc收费方式，它们各自占有一定的比例。
+\begin{itemize}
+	\item 传统收费方式是指车辆行驶到收费亭时需要停车，等待通知账单，现金支付费用，等待找零，收到零钱后离开。  (最慢) 见图*
+	\item  不找零（coins-only）：车辆行驶到收费亭时需要停车，需要投入大于或等于要求的价格，且机器不找零，投币后离开。  （比传统方式快，但比ETC慢）
+	\item Etc：当车辆通过收费站时，车内的收发器接收到收费站内可发出收费信息的感应器的信号，即可完成缴费，这种收费方式道路可大大提高收费站的通行能力。（最快）
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Other Assumptions}
+\section{Other Assumptions}
 为了简化模型，我们做出了如下假设
 \begin{itemize}
-\item 假设从收费站驶出的车流量分布为泊松分布。
+\item 假设所有从收费窗口流出的汽车车流量服从泊松分布
 \item 假设高速公路的出入分别是分离的。
-\item 
+\item 高速公路入口收费是分离的，出入互不影响。
 \item
 \end{itemize}
-
-\lipsum[7]
 
 \section{Analysis of the Problem}
 %设有如下高速公路收费站汇合区域，收费站有B个收费窗口，汇合到有L条车道的高速公路。
@@ -63,8 +69,7 @@ Toll merge area show as \ref{fig:merge_area},\cite{woo1991toll}
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{merge_area.eps}
-	\caption{merge area}
-	\label{fig:merge_area}
+	\caption{\label{fig:merge_area}merge area}
 \end{figure}
 我们假设所有通过收费窗口的车流分布程泊松分布，即越靠近中间车道的收费窗口通过的车流量越大。
 从收费站通过在扇形区域的合并模式，由于收费站广场的长度不同，分为两种合并方式。
@@ -77,12 +82,11 @@ We had considered 3 way to merge, 1) direct merge, 2) single side multiple merge
 	\subfigure[single merging]{\includegraphics[width=0.3\textwidth]{ws_merge.eps}}
 	\subfigure[one-side mutiple mering]{\includegraphics[width=0.3\textwidth]{ss_merge.eps}}
 	\subfigure[double-side multiple merging]{\includegraphics[width=0.3\textwidth]{ds_merge.eps}}
-	\caption{merging ways}
-	\label{fig:merge_ways}
+	\caption{\label{fig:merge_ways}merging ways}
 \end{figure}
 衡量收费窗口通行能力的主要因素就是考虑车辆通过收费广场的最大通行容量，即最大不发生拥堵的车流量,将合并区域离散化，建立元胞自动机模型。
-\subsection{建立模型}
-车辆通过收费窗口之后，车流量对于收费窗口的分布服从泊松分布.为定量模拟收费广场合并时广场形状和面积对车流量的影响，将收费广场网格化，分割成为有限个、状态连续的单元格，每一小格可近似看作一个单元（unit），每个单元的取值为该单元的车流量（“元胞”的车流量定义为单位时间内在该元胞上通过的机动车数量）。散布在规则格网中的每一单元都遵循同样的运动规则，依据确定的局部规则作同步更新。大量元胞通过简单的相互作用而构成动态系统的演化。
+\section{建立模型}
+车辆通过收费窗口之后，车流量对于收费窗口的分布服从泊松分布.为定量模拟收费广场合并时广场形状和面积对车流量的影响，将收费广场网格化，分割成为有限个、状态连续的单元格，每一小格可近似看作一个单元（unit），每个单元的取值为该单元的车流密度(Density $K$)（“元胞”的车流量定义为单位时间内在该元胞上通过的机动车数量）。散布在规则格网中的每一单元都遵循同样的运动规则，依据确定的局部规则作同步更新。大量元胞通过简单的相互作用而构成动态系统的演化。
 由左侧第一列产生进入流量Q，所有流量的传播方向如Figure \ref{fig:road_dis}所示。
 %将路口分布看为离散化如下图
 %箭头的方向代表车流量可能的方向
@@ -90,38 +94,54 @@ We had considered 3 way to merge, 1) direct merge, 2) single side multiple merge
 \small
 \centering
 \includegraphics[width=0.5\textwidth]{road_dis.eps}
-\caption{road discrete} 
-\label{fig:road_dis}
+\caption{\label{fig:road_dis}road discrete} 
 \end{figure}
-所有单元按照传播方向与周围格子的状态决定传播流量，传播流量的大小由传播函数控制，如Equation \ref{eq:s_func}所示。
+所有单元按照传播方向与周围格子的状态决定传播流量，传播流量的大小由传播函数控制，如Equation \ref{eq:s_func}所示，其函数图像为Figure \ref{fig:s_func}。
 \begin{equation}
-f=\frac{1}{1+e^{3q-7}}
+F(K)=\frac{2}{1+e^{K}}
 \label{eq:s_func}
 \end{equation}
-图像如Figure \ref{fig:s_func}所示。每个单元格达到4的车流量视为饱和。
 \begin{figure}[!htbp]
 	\small
 	\centering
 	\includegraphics[width=0.5\textwidth]{sfunc.eps}
-	\caption{s function} 
-	\label{fig:s_func}
+	\caption{\label{fig:s_func}s function} 
 \end{figure}
-如果某单元格只有一个传播方向，那么此单元格只需简单通过传播函数决定传播流量的多少到下一个单元格；若某单元格具有不同的选择，即有两个传播方向，单元格首先会根据传播方向上的流量的不同而决定一个主要的传播方向，比如：如果某单元格下方流量较少而前方流量较多，则传播流量的主要部分会集中在下方，伪代码如Algorithm \ref{alg:flow_ctl}所示：
+对于传播流量$Q$有
+$$Q=K \cdot F(K)$$
+所以Density K 与Flow Q 的关系如\ref{fig:qrk}所示，其中$K_c$为critical density，$K_j$为jam density，$MaxQ$为最大可能传播流量。
+图像如Figure \ref{fig:qrk}所示。每个单元格达到7的车流量视为饱和。
+\begin{figure}[!htbp]
+	\small
+	\centering
+	\includegraphics[width=0.5\textwidth]{qrk.eps}
+	\caption{\label{fig:qrk}Spread flow Q for density K} 
+\end{figure}
+如果某单元格只有一个传播方向，那么此单元格只需简单通过传播函数决定传播流量的多少到下一个单元格，如Figure \ref{subfig:s1}所示，颜色越深代表流量越大。
+
+若某单元格具有不同的选择，即有两个传播方向，单元格首先会根据传播方向上的流量的不同而决定一个主要的传播方向，比如：如果某单元格下方流量较少而前方流量较多，则传播流量的主要部分会集中在下方，伪代码如Algorithm \ref{alg:flow_ctl}所示，传播方式如Figure \ref{subfig:s2}所示，其中$Q'>Q$。
+\begin{figure}[!htbp]
+	\centering
+	\subfigure[]{\label{subfig:s1}\includegraphics[width=0.2\textwidth]{sp1.eps}}
+	 \hspace{.3\textwidth}
+	\subfigure[]{\label{subfig:s2}\includegraphics[width=0.2\textwidth]{sp2.eps}}
+	\caption{spread mode}
+	\label{fig:sp_exm}
+\end{figure}
 \begin{algorithm}
 	\begin{algorithmic}
-	\caption{Flow Control}
-	\label{alg:flow_ctl}
-        \Require $\text{本格流量q，前方一格流量ql，下方一格流量qd}$
+	\caption{\label{alg:flow_ctl}Flow Control}
+        \Require $\text{Self density k，Forward density kl，Downword density kd}$
 		\Ensure $\text{流量控制结果}$
-		\Function {FlowCtl}{$q, qd, ql$}
-				\If {$qd < ql$}
-					\State $q,qd \gets \Call{downward}{q,qd}$
-					\State $q,ql \gets \Call{forward}{q,ql}$
+		\Function {FlowCtl}{$k, kd, kl$}
+				\If {$kd < kl$}
+					\State $k,kd \gets \Call{Downward}{k,kd}$
+					\State $k,kl \gets \Call{Forward}{k,kl}$
 				\Else
-					\State $q,ql \gets \Call{forward}{q,ql}$
-					\State $q,qd \gets \Call{downward}{q,qd}$
+					\State $k,kl \gets \Call{Forward}{k,kl}$
+					\State $k,kd \gets \Call{Downward}{k,kd}$
 			\EndIf
-			\State \Return{$q,qd,ql$}
+			\State \Return{$k,kd,kl$}
 		\EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -131,7 +151,17 @@ ETC may lead\cite{spiliopoulou2009toll}
 
 \section{The Model Results}
 \subsection{并道方式选择}
-结合所建立的模型，为求解合并区域的最优形状，定量分析当B=10，L=2时进行仿真，结果如下。
+结合所建立的模型，为求解合并区域的最优形状，定量分析当B=10，L=2时进行仿真，
+车辆到来概率如下图，横坐标代表收费窗口$B_i$，纵坐标代表收费窗口$B_i$的来车率，
+如Figure \ref{fig:poisson}所示。
+\begin{figure}[!htbp]
+	\small
+	\centering
+	\includegraphics[width=0.8\textwidth]{poisson.eps}
+	\caption{\label{fig:poisson}poisson distribution} 
+ \end{figure}
+
+利用上述建立的模型，对合并区域长度对道路通行能力的影响进行仿真，将合并区域长度分为单次并道（短）和多次并道（长），仿真结果如下 。
 \subsubsection{单次并道}
 单次并道是指从高速收费亭的B个收费口出来到L个车道的高速公路的过程中，只需要一次车道合并。在此种情况下，在合并过程中，多个车道同时合并，容易发生交通事故，且多车同时并道容易造成道路拥挤。通过以上建立的模型利用matlab仿真实现，如Figure \ref{fig:direct_out}所示。
 最终出流量为$71.4$。
@@ -139,8 +169,7 @@ ETC may lead\cite{spiliopoulou2009toll}
 	\small
 	\centering
 	\includegraphics[width=0.8\textwidth]{sssout.eps}
-	\caption{direct out} 
-	\label{fig:direct_out}
+	\caption{\label{fig:direct_out}direct out} 
 \end{figure}
 \subsubsection{多次并道}
 多次并道是指从高速收费亭的B个收费口出来需要多次车道合并才能到达L个车道的高速公路的并道模式。在此种情况下，道路合并次数可以根据高速公路的车道数而定，且在并道过程中，机动车驾驶人可选择道路中车辆数少且更加便捷的路线并道，即更加便捷、选择更多的减少交通事故的发生。在此情况下，可对单侧并道、双侧并道的情形分别研究，通过matlab程序实现，结果Figure \ref{fig:multiple_out}所示。
@@ -149,45 +178,77 @@ ETC may lead\cite{spiliopoulou2009toll}
 	\small
 	\centering
 	\includegraphics[width=0.8\textwidth]{dssout.eps}
-	\caption{multiple out} 
-	\label{fig:multiple_out}
+	\caption{\label{fig:multiple_out}multiple out} 
 \end{figure}
 
-以上结果显示，适当增加合并区域的长度，会有效改善道路的通行能力，
-\subsection{车流量大小的影响}
-当车流量较小时，道路通行能力维持在最高水平。
-\lipsum[9]
-\begin{figure}[!htbp]
-	\small
-	\centering
-	\includegraphics[width=0.8\textwidth]{low_q.eps}
-	\caption{low q} 
-	\label{fig:q_low}
-\end{figure}
+以上结果显示，多次并道，即适当增加合并区域的长度，会有效改善道路的通行能力，因此在造价可以接受的范围内，应尽量增加合并区域的长度，以提高道路的通行能力。
 
-当车流量较高时，道路通行能力很快饱和。
-\begin{figure}[!htbp]
-	\small
-	\centering
-	\includegraphics[width=0.8\textwidth]{high_q.eps}
-	\caption{high q} 
-	\label{fig:q_high}
-\end{figure}
 \subsection{事故预防}
-由仿真得到交通密度如Figure \ref{fig:q_map}所示。
+根据Zhou, Min and Sisiopiku的研究\cite{zhou1997relationship}当交通密度增大时事故发生的概率也会增高。由仿真得到交通密度如Figure \ref{fig:q_map}所示。根据流量判断哪条道路上发生事故的概率更高，提前做好预防。
 \begin{figure}[!htbp]
 	\small
 	\centering
 	\includegraphics[width=0.8\textwidth]{q_map.eps}
-	\caption{q map} 
-	\label{fig:q_map}
+	\caption{\label{fig:q_map}q map} 
 \end{figure}
-根据流量判断哪条道路上发生事故的概率更高，提前做好预防。
+
+图中黑白色区域代表出收费站后的收费广场区域，图中黄色部分表示随着时间的推移，道路上车流量的变化，颜色的深浅代表车流量多少。颜色越深表示车流量越大。
+\subsection{车流量大小的影响}
+
+根据上述所建立的模型，分别研究收费站在大、小车流量下的通行效率。
+当车流量较小时，道路车流密度较小，车辆能优先选择便捷、安全、合适的收费口进入收费站，出收费站后的道路合并也可优先选择道路畅通、便捷的车道通行。这种情况下，车流量小、道路密度小，车辆通行快。改变上述模型中进入收费广场的车辆数目，通过matlab运行，结果如Figure \ref{fig:q_low}，可见当车流量较小时，道路通行能力维持在最高水平。
+
+当车流量较大时，道路车流密度大，道路较为拥挤，结果如Figure \ref{fig:q_high}所示，可见当车流量较高时，道路通行能力很快饱和。
+\begin{figure}[!htbp]
+	\small
+	\centering
+	\includegraphics[width=0.8\textwidth]{low_q.eps}
+	\caption{\label{fig:q_low}low q} 
+\end{figure}
+
+\begin{figure}[!htbp]
+	\small
+	\centering
+	\includegraphics[width=0.8\textwidth]{high_q.eps}
+	\caption{\label{fig:q_high}high q} 
+\end{figure}
+	在Figure \ref{fig:q_low}和\ref{fig:q_high}中，Throughput Sum（图像的名字 可能还会有变动）图像表示随着时间的变化，经过收费广场的总车流量变化；Number of vehicles图像 表示收费广场上的车流密度的和即机动车数量随时间变化的曲线；Throughput Change图像为流出收费广场的车流量随时间变化的图像。
+	
+	Figure 10中为小流量的情况，Figure 11为大流量的情况。通过图像给出的直观信息，由Figure 10中的throughput sum可以看出，道路流量较小时，通过收费广场的总车流量随时间整体呈现近乎线性增长趋势，说明流量较小时，收费广场压力小，车辆能自由/无压力通行；从Number of vehicles中可以看出，收费广场上的流量密度在几乎一直在一个流量密度附近波动；从Throughput Change图像得出，流出收费广场的车流量也几乎始终在最大车流量值附近波动。说明在较小流量情况下，收费广场几乎不存在交通拥挤问题。由Figure 11的a图可以看出，随时间的变化，通过收费广场的车辆数在刚开始的一小段时间内，呈线性递增趋势，之后变化速率减缓（斜率变小），说明经过收费广场的车流量受到阻碍，有明显减少。B图展示了收费广场流量密度近乎线性增加，说明此时收费广场上车辆数呈线性增加，即车辆进出收费广场不均衡，“进多出少”；图c指出流出收费广场的车流量从一开始的比较大迅速降到很低的数值，说明此种情况下，车辆流出收费广场特别慢，显然为堵车状态，不利于车辆通行。
+
 
 \subsection{自动驾驶车辆的影响}
+自动驾驶是一项新兴技术，随着自动驾驶汽车数量逐渐增加，由于自动驾驶技术的特性，道路容量将会下降
+自动驾驶车辆通过传感器识别与其他车辆之间的距离，保持车距和车速。自动驾驶汽车与人工驾驶汽车的主要区别在于：自动驾驶汽车通过汽车车身的传感器，感知与周围车辆的距离，保持与周围车辆的车距、与障碍物之间的距离，以保证车及车内乘客的安全，且
+在车流量大、道路密度较大的情形下，比如收费站，自动驾驶车辆会与周围车辆保持一定距离以确保车辆与人的安全，增大了车间距，导致道路车流密度降低，因而道路通行能力降低。
 加入自动驾驶车辆后，会使道路饱和密度降低，
+\begin{table}
+	\centering
+	\caption{\label{tab:test}自动驾驶车辆与普通车辆的区别}
+	\begin{tabular}{ccc}
+		\toprule
+		& self-driving & 人工\\ 
+		\midrule
+		原理& 传感器感知周围路况& 人对周围交通状况的感知  \\ 
+		在车流量较大时& 保持安全车距(较大)&安全车距更小 \\
+		\bottomrule
+	\end{tabular} 
+	
+\end{table}
 
 \subsection{电子支付通道的影响}
+
+当车辆从传统收费站通过时，车辆需要停车接受账单，并向收费亭工作人员支付现金，等待找零。服务时间较长，且容易受服务人员工作效率的影响，使得道路通行能力降低。通过不找零收费站时，车辆需要停车接受账单，但是此时，司机只能支付coins，不需找零，相较于传统服务时间，此种时间有所减少。通过etc通道时，车辆无需停车，且不使用现金交易，避免找零，减少停车等待时间，提高了道路的通行能力，使得道路车流密度增大\cite{spiliopoulou2009toll}。
+
+不同支付方式的流程如Figure \ref{fig:crash_ways}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{crash_ways.eps}
+	\caption{flow chart of three different toll methods}
+	\label{fig:crash_ways}
+\end{figure}
+
 增加电子支付通道，会提高该道路的流量。下图是开通之后
 \begin{figure}[!htbp]
 	\small
@@ -202,21 +263,20 @@ ETC may lead\cite{spiliopoulou2009toll}
 \section{Evaluate of the Mode}
 
 \section{Strengths and weaknesses}
-\lipsum[12]
-
 \subsection{Strengths}
 \begin{itemize}
 \item \textbf{Applies widely}\\
-This  system can be used for many types of airplanes, and it also
-solves the interference during  the procedure of the boarding
-airplane,as described above we can get to the  optimization
-boarding time.We also know that all the service is automate.
+利用了差分的思想。收费广场上车辆通行过程中，道路车流量时刻发生变化，整体考虑整个收费广场的车流量变化十分困难，利用局部车流量代表整体车流量，也不具有实际意义。我们采取将收费广场网格化，将整体分解成有限个单元格，能充分分析每个单元格上车流量的变化，进而得到整体的流量变化。
 \item \textbf{Improve the quality of the airport service}\\
-Balancing the cost of the cost and the benefit, it will bring in
-more convenient  for airport and passengers.It also saves many
-human resources for the airline. \item \textbf{}
+基于元胞自动机的改进模型，由元胞自动机的连续状体转移，即0代表无，1代表有，联系收费广场的车流量，将元胞的取值连续化，单位时间内每个元胞上的车流量赋值给元胞，元胞间的转移，延伸为元胞间车流量的转移。
+\item \textbf{balabala}\\
+考虑自动驾驶汽车时，从自动驾驶汽车与人工驾驶汽车的区别入手，将自动驾驶汽车简化为人工驾驶汽车时元胞车流量减少的情形，量化自动驾驶与人工驾驶的区别。
 \end{itemize}
-
+\subsection{Weaknesses}
+\begin{itemize}
+	\item \textbf{balabala}\\
+	基于元胞自动机的收费广场规划模型对于解决收费广场面积大小不具有优势，因而解决成本有一定的难度，只能从车流量的角度衡量收费区域设置的合理性。
+\end{itemize}
 \newpage
 \bibliography{mybib}
 \bibliographystyle{plain}
