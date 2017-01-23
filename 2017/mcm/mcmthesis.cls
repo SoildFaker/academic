@@ -176,7 +176,7 @@
     \@keywords\par
   }
 \fi
-\newcommand{\headset}{{\Large\the\year}\\MCM/ICM\\Summary Sheet}
+\newcommand{\headset}{{\Large\the\year}\\MCM/ICM\\Abstract Sheet}
 \newcommand{\problem}[1]{\mcmsetup{problem = #1}}
 \def\makesheet{%
   \pagestyle{empty}%
