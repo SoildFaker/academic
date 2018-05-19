@@ -1,0 +1,112 @@
+% TODO: build struct <23-12-17 Enbin> %
+
+\documentclass[fontset=ubuntu,a4paper,12pt]{ctexart}
+\usepackage{CJK}
+\usepackage{bm}
+\usepackage{cite}
+\usepackage[numbib]{tocbibind}
+\usepackage{amssymb}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{wasysym}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{graphics}
+%\usepackage{overcite}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs} 
+\usepackage{ listings} 
+\usepackage{amsmath}
+\usepackage{multirow}
+%\renewcommand{\arraystretch}{1.2}
+
+\pagestyle{plain}
+\evensidemargin 3mm \oddsidemargin 3mm
+\textwidth 154mm \textheight 225mm
+
+\begin{document}  
+	\begin{center}
+		\zihao{3}{\heiti 基于优化算法的航班选择系统的设计与开发}
+	\end{center}
+	\linespread{1.2}
+	\begin{center}
+		\zihao{4}{\heiti 摘\ \ \ \ 要}
+	\end{center}
+
+	  \zihao{4}{\songti 
+		
+		本文致力于使用随机优化技术来解决航班选择问题。
+		曾为团体安排过旅游计划的人都知道，计划的制定要求有许多不同的输入，比如：每个人的航班时间表是什么，要租用多少辆汽车，哪个机场是最通畅的等等。许多的输出结果也必须考虑，比如：总的成本、候机时间、起飞时间。因为我们无法将这些输入用一个简单的公式映射到输出，所以要找到最优解，就必须借助于优化算法。
+		
+		
+		随机优化技术是可以很好的解决受多种变量的影响，存在许多可能解的问题，以及结果因这些变量的组合而产生很大变化的问题。优化算法通常是通过尝试不同的解并给这些解打分以确定其质量的方式来找到一个问题的最优解。本文主要使用了两种不同优化算法：退火算法与遗传算法。通过对比不同算法的结果，选出最优算法方案。
+	}
+	\\
+	\\
+	\textbf{关键词：}\ 遗传算法\ 退火算法\ 航班选择
+	
+	\newpage
+	\tableofcontents
+	\newpage
+	\section{序言}
+		随着时代的发展，航空运输逐渐在生产生活中占据重要地位，跨国客运与货运更是离不开航空运输的便利。但是航班数量的不断增长，使得航空管理系统已不堪重负，机场容量将成为航空运输发展的瓶颈。根据民航局发布的报告2007-2015年末，我国民用航空航线条数从1,506条增至3,326条，民用航空通航机场数从148个增至210个，运输飞机在册架数从1,134架增至2,650架，运输总周转量从365.30亿吨公里增长到851.65亿吨公里。但仅2017年5月民航局运输司、民航局消费者事务中心和中国航空运输协会共受理消费者投诉2044件。航班延误已经成为航空运输中的重要问题
+		
+		
+		为了解决上述问题，利用优化算法求解旅客出行时应该选择哪个航班可以尽可能的优化出行路线，优化算法的优劣决定旅客的等待时间与旅行时的花费，合适的优化算法能够最优化出行路线，最小化出行成本。
+	\section{相关工作的说明}
+		\subsection{团体旅游}
+			\subsubsection{简介}
+			本文所用示例是为来自不同地区又去往同一地点旅游的人安排路线。具体细节如表\ref{tab:family_info}所示，而他们的共同目的地则是LGA(位于纽约的机场)。
+			\begin{table}[!htbp]
+				\centering
+				\caption{需要安排的成员信息}
+				\label{tab:family_info}
+				\begin{tabular}{c|cccccc}
+					\toprule[1pt]
+					姓名 & Seymour & Franny & Zooey & Walt & Buudy & Les \\
+					\hline
+					来自 & BOS     & DAL	  & CAK   & MIA  & ORD   & OMA \\
+					\bottomrule[1pt]
+				\end{tabular} 
+			\end{table}
+			所有需要安排的成员都需要在同一天到达又要在同一天离开，并且去机场时搭乘同样的交通工具。
+			\subsubsection{数据的获取与处理}
+			我们从相关的航班网站\cite中下载对应的航班数据并保存在文本文件中
+		\subsection{问题描述}
+		\subsection{成本函数}
+	\section{问题求解}
+		\subsection{随机搜索}
+		\subsection{爬山算法寻找最优解}
+			\subsubsection{算法的描述}
+			\subsubsection{局部最优解}
+			
+		\subsection{退火算法}
+			\subsubsection{模型的建立}
+			蚁群算法是通过模拟蚂蚁群体觅食行径而提出来的一种模拟进化算法\cite{士勇2004蚁群算法及其应用}。
+			经过研究，蚂蚁总能找到从食物源到蚁穴的最短路线。蚂蚁个体之间通过外激素（即信息素）
+			进行信息传递，当蚂蚁发现食物源并返回蚁穴告知同伴的途中，会释放信息素，便于同伴通
+			过感知信息素的存在和其浓度，选择合适路径以找到食物源。蚂蚁在刚找到食物源或者蚁穴
+			时释放的信息素量最多，并随着蚂蚁个体走过距离的增加，释放的信息素越来越少。当遇
+			到图\ref{fig:anti1}中所示路线时，即A点处有两条分支，蚂蚁可选择从经B点到达D点
+			，也可选择经C点到达D点，显然AB的距离小于AC的距离，蚂蚁会根据路径长度，释放不
+			同量的信息素，给同伴此条路径的信息\cite{马良2001蚂蚁算法在组合优化中的应用}。
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=10cm]{pic/anti1.png}
+				\caption{蚁群的行为特点}
+				\label{fig:anti1}
+			\end{figure}
+		\subsection{遗传算法}
+			\subsubsection{模型的建立}
+	\section{总结}
+	
+	\newpage
+	\bibliographystyle{gbt7714}	
+	\bibliography{mybib}
+	\newpage
+	\section{致谢}
+		感谢CCTV、MTV、BTV
+\end{document}
