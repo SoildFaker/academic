@@ -3,6 +3,8 @@
 *.out
 *.bbl
 *.blg
+*.bak~
+*.gz
 *.dvi
 *.synctex.gz
 *.toc

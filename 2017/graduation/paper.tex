@@ -25,6 +25,7 @@
 \usepackage{etoolbox}
 \usepackage{caption2} 
 \usepackage{setspace}
+\usepackage{fontspec}
 \usepackage{titlesec}
 \usepackage[nottoc,numbib]{tocbibind}
 \usepackage{fancyhdr}
@@ -43,7 +44,7 @@
 %\renewcommand{\arraystretch}{1.2}
 \renewcommand{\captionlabeldelim}{\ }
 \newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
-\renewcommand{\eqref}[1]{公式 (\ref{#1})}
+\renewcommand{\eqref}[1]{公式 \ref{#1}}
 \renewcommand*{\baselinestretch}{1.38}
 \floatname{algorithm}{算法}
 \renewcommand{\algorithmicrequire}{\textbf{输入:}}
@@ -55,44 +56,44 @@
 \rfoot{\thepage} 
 \makeatother
 \begin{document}  
-	\begin{titlepage} \begin{center} % Upper part of the page 
-			\includegraphics[width=0.7\textwidth]{pic/logo.png}
-			\\
-      \textsc {\LARGE 2014 级毕业设计(论文)} \\
+	\begin{titlepage}\heiti \begin{center} % Upper part of the page 
+			\includegraphics[width=0.5\textwidth]{pic/logo.png} \\
+			[0.3cm]\ \\
+          {\zihao{-2}\fontspec{FandolHei}2014 级毕业设计(论文)} \\
 			[0.5cm]\ \\
-			[0.4cm] {\huge \bfseries 基于优化算法的航班选择系统的设计与开发}
-      \\[0.4cm]\ \\[1.5cm]\ \\[1.4cm]
-			\large {年\quad\quad 级:} 
+            [0.4cm] {\zihao{1} 基于优化算法的航班选择系统的设计与开发}
+      \\[4.3cm]
 			\begin{minipage}[t]{0.7\textwidth} 
 				\centering
-				\uline{\makebox[0.7\textwidth]{2014级}}\par
+                \zihao{-2} {年\quad\quad 级:} 
+				\uline{\makebox[0.7\textwidth]{\fontspec{FandolHei}2014级}}\par
 			\end{minipage}
 			\\[0.6cm]
-			\large {学\quad\quad 号:} 
 			\begin{minipage}[t]{0.7\textwidth}
 				\centering
-				\uline{\makebox[0.7\textwidth]{2014271055}}\par
+                \zihao{-2} {学\quad\quad 号:} 
+                \uline{\makebox[0.7\textwidth]{\fontspec{FandolHei}2014271055}}\par
 			\end{minipage}
 			\\[0.6cm]
-			\large {姓\quad\quad 名:} 
 			\begin{minipage}[t]{0.7\textwidth}
 				\centering
+                \zihao{-2} {姓\quad\quad 名:} 
 				\uline{\makebox[0.7\textwidth]{李恩宾}}\par
 			\end{minipage}
 			\\[0.6cm]
-			\large {专\quad\quad 业:} 
 			\begin{minipage}[t]{0.7\textwidth}
 				\centering
+                \zihao{-2} {专\quad\quad 业:} 
 				\uline{\makebox[0.7\textwidth]{电子信息科学与技术}}\par
 			\end{minipage}
 			\\[0.6cm]
-			\large {指导教师:} 
 			\begin{minipage}[t]{0.7\textwidth}
 				\centering
+                \zihao{-2} {指导教师:} 
 				\uline{\makebox[0.7\textwidth]{李昊璇}}\par
 			\end{minipage}
 			\vfill % Bottom of the page 
-			{\large 2018年4月} \end{center}
+        {\zihao{-2} 二零一八年五月} \end{center}
     \end{titlepage}
 	%当处理类似这样的问题时，我们有必要明确潜在的题解将如何表达。
   %后面我们将看到优化函数是非常通用的。
@@ -347,13 +348,13 @@
 			在复杂问题中确定成本函数，根据多个不同变量确认选择方案的优劣程度是
             比较困难的。因此在航班选择问题中，我们主要讨论如下几个影响因素：
 			\begin{description}
-				\item[价格因素] 机票所价格占据出行成本的大部分，因此在成本函数
+				\item[价格因素$C_1$] 机票所价格占据出行成本的大部分，因此在成本函数
                     中占据较大比重。
-				\item[旅行时间] 每个人乘坐飞机所消耗的时间。
-				\item[等待时间] 如果有成员的机票较早，那么其他成员将花费的等待成本。
-				\item[出发成本] 如果出发时间较早，也会增加成员的出发成本，因为这
+				\item[旅行时间$T_1$] 每个人乘坐飞机所消耗的时间。
+				\item[等待时间$T_2$] 如果有成员的机票较早，那么其他成员将花费的等待成本。
+				\item[出发成本$C_2$] 如果出发时间较早，也会增加成员的出发成本，因为这
                     需要要求成员尽早起床。
-				\item[车辆租用] 如果集体租用同一辆汽车，那么我们需要在同一天早
+				\item[车辆租用$R$] 如果集体租用同一辆汽车，那么我们需要在同一天早
                     于租用时间返还车辆，否则将会多付一天租用费。
 			\end{description}
 			确定上述影响因素后，我们需要将所有因素结合为一个成本函数并且确定每
@@ -361,46 +362,26 @@
             组合在一起的一个值。在航班选择问题中我们将在飞机上的时间成本设定为
             每分钟等价为一美元的成本，在机场等待的时间成本为每分钟等价0.5美元，
             这样我们就把时间成本与价格成本结合在了一起。
-			
+            则单个成员的成本函数如\eqref{eq:costfunc}所示。
+			\begin{equation}
+                C = f_{c1} \times C_1 + f_{c2} \times C_2 + 
+                f_{t1} \times T_1 + f_{t2} \times T_2 + f_r \times R
+			    \label{eq:costfunc}
+			\end{equation}
+
 			结合机票的价格成本，飞行的时间成本，成员在机场等待的成本还有汽车租
-            用的成本，最终我们可以得到成本函数的具体算法过程如下
+            用的成本，最终我们可以得到成本函数的具体算法过程如附录
             算法\ref{alg:evaluation}所示。
-			\begin{algorithm}
-                \begin{algorithmic}
-					\caption{\label{alg:evaluation}成本函数}
-					\Require $\text{航班选择序列S}$
-					\Ensure $\text{序列S的出行成本C}$
-					\Function {EvaluateCost}{$S$}
-					\State $C \gets \Call {CostOfTicket}{S}$ \Comment 机票价格成本
-					\State $C \gets C + \Call {CostOfTravel} {S}$ \Comment 飞行时间成本
-					\State $C \gets C + \Call {CostOfWait} {S}$ \Comment 等待时间成本
-					\State $C \gets C + \Call {CostOfEarly} {S}$ \Comment 出发时间成本
-					\State $C \gets C + \Call {CostOfRent} {S}$ \Comment 汽车租用成本
-					\State \Return{$C$}
-					\EndFunction
-                \end{algorithmic}
-			\end{algorithm}
+            总的成本函数\eqref{eq:mincostfunc}如，
+            优化算法的目的就是使得\eqref{eq:mincostfunc}最小。
+			\begin{equation}
+                F(S)=\sum_{i=0}^{i<12}C(S_{i})
+                \label{eq:mincostfunc}
+			\end{equation}
 		
 			其中在算法\ref{alg:evaluation}中的函数\Call {CostOfWait}{S}中，我们
             需要针对特殊情况做具体的处理。既我们允许任何需要等待两个小时或以上
-            的人可以独自离开，具体算法实现如算法\ref{alg:CostOfWait}所示。
-			\begin{algorithm}
-				\begin{algorithmic}
-					\caption{\label{alg:CostOfWait}等待时间成本}
-					\Require $\text{航班选择序列S}$
-					\Ensure $\text{序列S的等待时间成本C}$
-					\Function {CostOfWait}{$S$}
-					\State $S' \gets \Call {SortByLeftTime}{S[5:11]}$ \Comment 将返回时的序列按照时间排序
-					\For {$i = 5 \to 11$} 
-						\State $C \gets C + 0.5 \times i \times \Call {CostOfTime}{S'[i]}$ \Comment 时间成本
-						\If {$(S'[i+1].LeftTime - S'[i].LeftTime) > 120$}\Comment 时间超过2小时
-							\State $i \gets i + 1$ \Comment 跳过下一个成员
-						\EndIf	
-					\EndFor
-					\State \Return{$C$}
-					\EndFunction
-				\end{algorithmic}
-			\end{algorithm}
+            的人可以独自离开，具体算法实现如附录算法\ref{alg:CostOfWait}所示。
 		
 		成本函数确定后，
         我们需要找到方法使得成本函数的输出最小\upcite{陈冬芳2005全局最优化算法及其应用}，
@@ -443,28 +424,17 @@
 		\label{sec:random}
 			随机搜索的本质是随机猜测可能的安排方案并且通过与之前方案的对比，
             通过成本函数找到可行的解\upcite{贺红2002随机算法的一般性原理}。
+            其初始解的生成如\eqref{eq:randomfunc}所示，其中$l$是没人所对应航班数量。
+            在评估$S$的成本函数后，算法将会生成另外一个解$S'$，若$F(S')<F(S)$
+            则选取$S'$否则相反。如此迭代多个过程以求找到一个可行解。
+            \begin{equation}
+                S = [Random(0,l), \dots , Random(0,l)]\\
+                \label{eq:randomfunc}
+            \end{equation}
 			
 			加入随机搜索算法是为了与其后要讨论的其他优化算法做对比，以衡量算法
             的优劣，并介绍一般优化算法的调用过程与基本结构。随机搜索算法的结构
-            如算法\ref{alg:randomsearch}所示。
-			\begin{algorithm}
-				\begin{algorithmic}
-					\caption{\label{alg:randomsearch}随机搜索}
-					\Require $\text{可选的航班号序列D}$
-					\Ensure $\text{航班序列S}$
-					\Function {RandomSearch}{$D$}
-					\State $Best \gets 100000$ \Comment 成本初始化为一个大数
-					\For {$i = 0 \to 1000$}  \Comment 随机搜索1000次
-						\State $S' \gets [ \Call{Random}{0,D[i]}\ \textbf{for}\ i\ \textbf{in}\ \Call{Len}{D}]$ \Comment 随机生成一个航班序列
-						\If {$\Call{EvaluateCost}{S} < Best$} \Comment 如果比上一最好的成本更低
-							\State $Best \gets \Call{EvaluateCost}{S}$ \Comment 设置当前为最优
-							\State $S \gets S'$ \Comment 更新最优航班序列
-						\EndIf
-					\EndFor
-					\State \Return{$S$}
-					\EndFunction
-				\end{algorithmic}
-			\end{algorithm}
+            如附录算法\ref{alg:randomsearch}所示。
 		
 			作为一个对比基准，随机搜索的结果如表\ref{tab:random}所示，其中的序
             列既为\ref{sec:pdesc}\ 中的航班序列。
@@ -506,44 +476,21 @@
             当前解的右边。最终根据算法当前解会顺着斜坡一直走下去，
             直到没有更优解\upcite{Huhn2007Interior}。
 			
-			在航班选择问题中使用爬山算法解决问题的关键是，先随机生成一个航班选
-            择方案，然后再寻找与之相临的方案。在相邻的方案中寻找更优方案。
+            在航班选择问题中使用爬山算法解决问题的关键是，
+            如\eqref{eq:randomfunc}所示，先随机生成一个航班选
+            择方案$S$，然后再寻找与之相临的方案$S‘$。若$F(S')<F(S)$
+            则选取$S'$否则相反。然后在相邻的方案中继续上面的过程寻找更优方案。
+
+            构建相邻解集由距离函数\eqref{eq:distancefunc}给出，若$D(S,S')<=1$我们则
+            称$S$和$S'$是相邻解。
+            \begin{equation}
+                D(S,S') = \sum_{i=0}^{i<12}\|s_{i}-s'_{i}\|
+                \label{eq:distancefunc}
+            \end{equation}
 			
 			在本例中我们将与当前方案相比可以让某人乘坐的航班稍早或稍晚的方案作
             为相邻解。我们对每个搜索到的方案进行成本计算，并且安排在相邻解集中
-            的最优解作为下一次的初始解，具体算法如算法\ref{alg:around_search}所示。
-            \begin{algorithm}
-				\begin{algorithmic}
-					\caption{\label{alg:around_search}爬山算法}
-					\Require $\text{可选的航班号序列D}$
-					\Ensure $\text{航班序列S}$
-					\Function {HillClimbSearch}{$D$}
-					\State $S \gets [ \Call{Random}{0,D[i]}\ \textbf{for}\ i\ \textbf{in}\ \Call{Len}{D}]$ \Comment 随机生成一个航班序列
-					\While {$True$}
-						\State $Neighbors \gets [\ ]$ \Comment 相邻解的列表
-						\For {$i = 0 \to \Call{Len}{D}$} \Comment 生成临近解集
-							\If {$S[i] > D[i][0]$} \Comment 如果某人航班号大于起始航班号
-								\State $S[i] \gets S[i] - 1$ \Comment 选择到更小的航班号
-								\State $Neighbors.Append(S)$ \Comment 加入到相邻解集中
-							\Else \Comment 是起始航班号
-								\State $S[i] \gets S[i] + 1$ \Comment 选择到更大的航班号
-								\State $Neighbors.Append(S)$ \Comment 加入到相邻解集中
-							\EndIf
-						\EndFor
-						\State $Best \gets \Call{EvaluateCost}{S}$ \Comment 保存上次最优解
-						\For {$S'\ \textbf{in}\ Neighbors$}
-							\If {$\Call{EvaluateCost}{S'} < \Call{EvaluateCost}{S}$} \Comment S'为更优解
-								\State $S \gets S'$ \Comment 把更优解赋值给S
-							\EndIf
-						\EndFor
-						\If {$\Call{EvaluateCost}{S} = Best$} \Comment 如果没有更好的解
-							\State $Break$ \Comment 跳出循环
-						\EndIf
-					\EndWhile
-					\State \Return{$S$}
-					\EndFunction
-				\end{algorithmic}
-            \end{algorithm}
+            的最优解作为下一次的初始解，具体算法如附录中算法\ref{alg:around_search}所示。
 
 			最终爬山法所获得的结果如表\ref{tab:hillclimb}所示，可以看出使用了更
             加可行的算法后，爬山法与随机搜索相比有了很大进步。
@@ -579,10 +526,10 @@
             一般来说对于在\ref{sec:fitness_func}中建立的适应度函数，我们将其
             记为$f(s)$，其中$s$代表了不同的方案，$S$则是所有方案的集合。
             那么对于$f(s)$的全局最优解与局部最优解为
-            \begin{align*}
+            \begin{align}
                 f(s_0) &= min\{f(s)\} \qquad s_0,s \in S \\
                 f(d_0) &= min\{f(d)\} \qquad d_0,d \in D \quad D \subset S
-            \end{align*}
+            \end{align}
 
             在图\ref{fig:local_best}中如果爬山算法的初始解生成在虚线左边，
             如$A$点和$B$点，那么根据算法中的永远只找更好的解的规则，对于$A$点,
@@ -627,39 +574,15 @@
             公式\ref{eq:p_func}所示\upcite{Kirkpatrick1987Optimization}，
             其中$h$代表了更高成本解的成本，$l$代表了原本解的成本。
 			\begin{equation}
-			p=e^{-\frac{h-l}{T}}
-			\label{eq:p_func}
+			    p=e^{-\frac{|h-l|}{T}}
+			    \label{eq:p_func}
 			\end{equation}
 			
-			从公式\ref{eq:p_func}可以看出，在最开始时模拟退火算法的温度非常高，
+			从\eqref{eq:p_func}可以看出，在最开始时模拟退火算法的温度非常高，
             因此$p$的值将会非常接近$1$。即代表此时系统几乎完全接受成本最高的解，
             随着温度$T$的下降，$p$的值将会越来越接近$0$。
-			综上所述，具体程序如算法\ref{alg:annealing_search}所示。
-			\begin{algorithm}
-				\begin{algorithmic}
-					\caption{\label{alg:annealing_search}模拟退火算法}
-					\Require $\text{可选的航班号序列D，初始温度T，降温比率C}$
-					\Ensure $\text{航班序列S}$
-					\Function {AnnealingSearch}{$D,T=10000,C=0.95$}
-					\State $S \gets [ \Call{Random}{0,D[i]}\ \textbf{for}\ i\ \textbf{in}\ \Call{Len}{D}]$ \Comment 随机生成一个航班序列
-					\While {$T>0.1$} \Comment 在温度降低之前一直循环
-						\State $l \gets \Call{Len}{S}$ \Comment 获得序列的长度
-						\State $i \gets \Call{Random}{0,l}$ \Comment 随机选择一项进行改变
-						\State $s \gets \Call{Random}{-1,1}$ \Comment 随机选择改变方向
-						\State $S' \gets S$ \Comment 生成下一解
-						\State $S'[i] \gets S'[i] + s$ \Comment 应用更改，随机变化
-						\State $ea \gets \Call{EvaluateCost}{S}$ \Comment 先前解的成本
-						\State $eb \gets \Call{EvaluateCost}{S'}$ \Comment 下一解的成本
-						\If {$ea < eb\ \textbf{or}\ \Call{Random}{0,1} < e^{-(eb-ea)/T}$} \Comment 模拟退火概率
-							\State $S \gets S'$ \Comment 赋值给下一解
-						\EndIf
-						\State $T \gets T \times C$ \Comment 降温
-					\EndWhile
-					\State \Return{$S$}
-					\EndFunction
-				\end{algorithmic}
-			\end{algorithm}
-		
+			综上所述，具体程序如附录中算法\ref{alg:annealing_search}所示。
+            
 			最终通过模拟退火算法得到的结果如表\ref{tab:annealing}所示，可以看到
             模拟退火的结果相比随机搜索与爬山算法都要优秀。同时，对比三个算法的
             时间复杂度可以发现，退火算法的执行时间明显减少。
@@ -689,8 +612,21 @@
             需要算法随机生成初始种群，即一组初始的可行解，再重复对种群进行选择、交
 			叉、变异等遗传操作直到种群成熟\upcite{赵静2008数学建模与数学实验}。
             然后根据成本函数对整个种群的适应度即成本进行排序，成本越低，适应度越高。
+
+            在算法开始时生成由多个个体$S$组成的种群$P$，设种群的大小为$N$，则种群
+            $P$的构成如\eqref{eq:pop}所示。其中的个体$S$则如\eqref{eq:randomfunc}
+            所示的内容。对于种群$P$的每次迭代过程我们都选择其中适应度高的优秀个体 
+            使其产于到下一代的生成过程中，选择的过程如\eqref{eq:choose}所示。
+            \begin{equation}
+                P = \{S_0,S_1,\dots,S_N\}
+                \label{eq:pop}
+            \end{equation}
 			
-			
+            \begin{equation}
+                P_{next} = \{S_i | S_i \in P ,F(S_i)>F(S_{0.2 \times N})\}
+                \label{eq:choose}
+            \end{equation}
+
 			\subsubsection{变异与交叉算子}
 			\label{sec:ag_cal}
 			为了能更好的在航班选择问题中使用遗传算法，我们将个体的适应度，也就是
@@ -736,35 +672,7 @@
 			正如\ref{sec:ag_cal}中描述的，遗传算法通过变异与交叉算法从已有的种群
             中构造一个新的种群，之后又以新的种群开始构造下一个种群。经过足够长的
             时间的迭代，遗传算法所得到的解将会越来越优越，
-            具体实现如算法\ref{alg:ga_search}所示。
-			\begin{algorithm}
-				\begin{algorithmic}
-					\caption{\label{alg:ga_search}遗传算法}
-					\Require $\text{可选的航班号序列D，种群数量N，变异比率M，交叉比率E}$
-					\Ensure $\text{航班序列S}$
-					\Function {GeneticSearch}{$D,N=500,M=0.2,E=0.2$}
-					\State $Pop \gets [\ ]$
-					\For {$i\ \textbf{in}\ \Call{Range}{N}$} \Comment 生成初始种群
-						\State $S \gets [ \Call{Random}{0,D[i]}\ \textbf{for}\ i\ \textbf{in}\ \Call{Len}{D}]$ \Comment 随机生成一个航班序列
-						\State $Pop.Append([S,\Call{EvaluateCost}{S}])$ \Comment 加入种群
-					\EndFor
-					
-					\For {$i\ \textbf{in}\ \Call{Range}{100}$} \Comment 循环100代
-						\State $Elite = \Call{Sort}{Pop,Pop[][-1]}[0:0.2 \times N]$ \Comment 选出适应度最好的20\%
-						\While {$\Call{Len}{Pop} < N$} \Comment 当种群未满时
-							\If {$\Call{Random}{0,1} < M$}
-								\State $Pop.Append(\Call{Muate}{Elite})$ \Comment 添加变异个体
-							\EndIf
-							\If {$\Call{Random}{0,1} < E$}
-							\State $Pop.Append(\Call{Cross}{Elite})$ \Comment 添加交叉个体
-							\EndIf
-						\EndWhile
-					\EndFor
-					\State $S \gets Elite[0][0:-1]$ \Comment 返回种群中最好的个体
-					\State \Return{$S$}
-					\EndFunction
-				\end{algorithmic}
-			\end{algorithm}
+            具体实现如附录中算法\ref{alg:ga_search}所示。
 		
 			从表\ref{tab:ga}来看，最终得到的结果相比于上面提到过的所有算法都要好，
             对比模拟退火算法的结果可以看出即使两种算法都能跳出局部最优解，但遗
@@ -837,7 +745,150 @@
             实时的服务。当人们在网站上预订机票时，后台系统将会自动给出优化结果，
             给出建议。实现网络上的订单优化，这将节约大量社会成本。
 	\newpage
+    \section{附录}
+			\begin{algorithm}
+                \begin{algorithmic}
+					\caption{\label{alg:evaluation}成本函数}
+					\Require $\text{航班选择序列S}$
+					\Ensure $\text{序列S的出行成本C}$
+					\Function {EvaluateCost}{$S$}
+					\State $C \gets \Call {CostOfTicket}{S}$ \Comment 机票价格成本
+					\State $C \gets C + \Call {CostOfTravel} {S}$ \Comment 飞行时间成本
+					\State $C \gets C + \Call {CostOfWait} {S}$ \Comment 等待时间成本
+					\State $C \gets C + \Call {CostOfEarly} {S}$ \Comment 出发时间成本
+					\State $C \gets C + \Call {CostOfRent} {S}$ \Comment 汽车租用成本
+					\State \Return{$C$}
+					\EndFunction
+                \end{algorithmic}
+			\end{algorithm}
 
+			\begin{algorithm}
+				\begin{algorithmic}
+					\caption{\label{alg:CostOfWait}等待时间成本}
+					\Require $\text{航班选择序列S}$
+					\Ensure $\text{序列S的等待时间成本C}$
+					\Function {CostOfWait}{$S$}
+					\State $S' \gets \Call {SortByLeftTime}{S[5:11]}$ \Comment 将返回时的序列按照时间排序
+					\For {$i = 5 \to 11$} 
+						\State $C \gets C + 0.5 \times i \times \Call {CostOfTime}{S'[i]}$ \Comment 时间成本
+						\If {$(S'[i+1].LeftTime - S'[i].LeftTime) > 120$}\Comment 时间超过2小时
+							\State $i \gets i + 1$ \Comment 跳过下一个成员
+						\EndIf	
+					\EndFor
+					\State \Return{$C$}
+					\EndFunction
+				\end{algorithmic}
+			\end{algorithm}
+
+			\begin{algorithm}
+				\begin{algorithmic}
+					\caption{\label{alg:randomsearch}随机搜索}
+					\Require $\text{可选的航班号序列D}$
+					\Ensure $\text{航班序列S}$
+					\Function {RandomSearch}{$D$}
+					\State $Best \gets 100000$ \Comment 成本初始化为一个大数
+					\For {$i = 0 \to 1000$}  \Comment 随机搜索1000次
+						\State $S' \gets [ \Call{Random}{0,D[i]}\ \textbf{for}\ i\ \textbf{in}\ \Call{Len}{D}]$ \Comment 随机生成一个航班序列
+						\If {$\Call{EvaluateCost}{S} < Best$} \Comment 如果比上一最好的成本更低
+							\State $Best \gets \Call{EvaluateCost}{S}$ \Comment 设置当前为最优
+							\State $S \gets S'$ \Comment 更新最优航班序列
+						\EndIf
+					\EndFor
+					\State \Return{$S$}
+					\EndFunction
+				\end{algorithmic}
+			\end{algorithm}
+
+            \begin{algorithm}
+				\begin{algorithmic}
+					\caption{\label{alg:around_search}爬山算法}
+					\Require $\text{可选的航班号序列D}$
+					\Ensure $\text{航班序列S}$
+					\Function {HillClimbSearch}{$D$}
+					\State $S \gets [ \Call{Random}{0,D[i]}\ \textbf{for}\ i\ \textbf{in}\ \Call{Len}{D}]$ \Comment 随机生成一个航班序列
+					\While {$True$}
+						\State $Neighbors \gets [\ ]$ \Comment 相邻解的列表
+						\For {$i = 0 \to \Call{Len}{D}$} \Comment 生成临近解集
+							\If {$S[i] > D[i][0]$} \Comment 如果某人航班号大于起始航班号
+								\State $S[i] \gets S[i] - 1$ \Comment 选择到更小的航班号
+								\State $Neighbors.Append(S)$ \Comment 加入到相邻解集中
+							\Else \Comment 是起始航班号
+								\State $S[i] \gets S[i] + 1$ \Comment 选择到更大的航班号
+								\State $Neighbors.Append(S)$ \Comment 加入到相邻解集中
+							\EndIf
+						\EndFor
+						\State $Best \gets \Call{EvaluateCost}{S}$ \Comment 保存上次最优解
+						\For {$S'\ \textbf{in}\ Neighbors$}
+							\If {$\Call{EvaluateCost}{S'} < \Call{EvaluateCost}{S}$} \Comment S'为更优解
+								\State $S \gets S'$ \Comment 把更优解赋值给S
+							\EndIf
+						\EndFor
+						\If {$\Call{EvaluateCost}{S} = Best$} \Comment 如果没有更好的解
+							\State $Break$ \Comment 跳出循环
+						\EndIf
+					\EndWhile
+					\State \Return{$S$}
+					\EndFunction
+				\end{algorithmic}
+            \end{algorithm}
+
+			\begin{algorithm}
+				\begin{algorithmic}
+					\caption{\label{alg:annealing_search}模拟退火算法}
+					\Require $\text{可选的航班号序列D，初始温度T，降温比率C}$
+					\Ensure $\text{航班序列S}$
+					\Function {AnnealingSearch}{$D,T=10000,C=0.95$}
+					\State $S \gets [ \Call{Random}{0,D[i]}\ \textbf{for}\ i\ \textbf{in}\ \Call{Len}{D}]$ \Comment 随机生成一个航班序列
+					\While {$T>0.1$} \Comment 在温度降低之前一直循环
+						\State $l \gets \Call{Len}{S}$ \Comment 获得序列的长度
+						\State $i \gets \Call{Random}{0,l}$ \Comment 随机选择一项进行改变
+						\State $s \gets \Call{Random}{-1,1}$ \Comment 随机选择改变方向
+						\State $S' \gets S$ \Comment 生成下一解
+						\State $S'[i] \gets S'[i] + s$ \Comment 应用更改，随机变化
+						\State $ea \gets \Call{EvaluateCost}{S}$ \Comment 先前解的成本
+						\State $eb \gets \Call{EvaluateCost}{S'}$ \Comment 下一解的成本
+						\If {$ea < eb\ \textbf{or}\ \Call{Random}{0,1} < e^{-(eb-ea)/T}$} \Comment 模拟退火概率
+							\State $S \gets S'$ \Comment 赋值给下一解
+						\EndIf
+						\State $T \gets T \times C$ \Comment 降温
+					\EndWhile
+					\State \Return{$S$}
+					\EndFunction
+				\end{algorithmic}
+			\end{algorithm}
+
+			\begin{algorithm}
+				\begin{algorithmic}
+					\caption{\label{alg:ga_search}遗传算法}
+					\Require $\text{可选的航班号序列D，种群数量N，变异比率M，交叉比率E}$
+					\Ensure $\text{航班序列S}$
+					\Function {GeneticSearch}{$D,N=500,M=0.2,E=0.2$}
+					\State $Pop \gets [\ ]$
+					\For {$i\ \textbf{in}\ \Call{Range}{N}$} \Comment 生成初始种群
+						\State $S \gets [ \Call{Random}{0,D[i]}\ \textbf{for}\ i\ \textbf{in}\ \Call{Len}{D}]$ \Comment 随机生成一个航班序列
+						\State $Pop.Append([S,\Call{EvaluateCost}{S}])$ \Comment 加入种群
+					\EndFor
+					
+					\For {$i\ \textbf{in}\ \Call{Range}{100}$} \Comment 循环100代
+						\State $Elite = \Call{Sort}{Pop,Pop[][-1]}[0:0.2 \times N]$ \Comment 选出适应度最好的20\%
+						\While {$\Call{Len}{Pop} < N$} \Comment 当种群未满时
+							\If {$\Call{Random}{0,1} < M$}
+								\State $Pop.Append(\Call{Muate}{Elite})$ \Comment 添加变异个体
+							\EndIf
+							\If {$\Call{Random}{0,1} < E$}
+							\State $Pop.Append(\Call{Cross}{Elite})$ \Comment 添加交叉个体
+							\EndIf
+						\EndWhile
+					\EndFor
+					\State $S \gets Elite[0][0:-1]$ \Comment 返回种群中最好的个体
+					\State \Return{$S$}
+					\EndFunction
+				\end{algorithmic}
+			\end{algorithm}
+    \qquad
+    \newpage
+    \qquad
+    \newpage
 	\bibliographystyle{gbt7714}	
 	\bibliography{mybib}
 	\newpage
